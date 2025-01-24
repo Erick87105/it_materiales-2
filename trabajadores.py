@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from openerp import models, fields
 
-class Areas(models.Model):
+class Puesto(models.Model):
     _name = 'trabajadores.materiales.puesto'
 
     name = fields.Char(string='Puesto Nuevo:', required=True)
