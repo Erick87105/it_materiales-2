@@ -18,3 +18,4 @@ class TrabajadoresMateriales(models.Model):
     puesto =  fields.Many2one('trabajadores.materiales.puesto', string='Puesto')
     date_hired = fields.Date(string='Fecha de Contratación')
     active = fields.Boolean(string='Activo', default=True)
+
