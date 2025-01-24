@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Menú Principal: Materiales -->
+        <menuitem name="Materiales" id="menu_materiales" sequence="15"/>
+        
+        <!-- Submenú: Configuración -->
+        <menuitem name="Configuración" id="menu_materiales_configuracion" parent="menu_materiales" sequence="10"/>
+
+        <menuitem name="Parámetros del Sistema" action="materiales_parametros_action" id="menu_materiales_parametros" sequence="11" parent="menu_materiales_configuracion"/>
+        <menuitem name="Ubicaciones" action="materiales_ubicaciones_action" id="menu_materiales_ubicaciones" sequence="20" parent="menu_materiales_configuracion"/>
+        <menuitem name="Proveedores" action="materiales_proveedor_action" id="menu_materiales_proveedor" sequence="30" parent="menu_materiales_configuracion"/>
+        <menuitem name="Productos" action="materiales_productos_action" id="menu_materiales_productos" sequence="40" parent="menu_materiales_configuracion"/>
+        <menuitem id="menu_materiales_trabajadores" name="Trabajadores" parent="menu_materiales_configuracion" sequence="41" action="action_trabajadores_materiales"/>
+        <menuitem name="Categorías de Depreciación" action="action_depreciacion_categoria2" id="menu_depreciacion_categoria" parent="menu_materiales_configuracion" sequence="42"/>
+        
+        <!-- Submenú: Operaciones -->
+        <menuitem name="Operaciones" id="menu_materiales_operaciones" parent="menu_materiales" sequence="20"/>
+
+        <menuitem name="Compras" action="materiales_compras_action" id="menu_materiales_compras" sequence="10" parent="menu_materiales_operaciones"/>
+        <menuitem name="Recepciones" action="action_materiales_recepcion" id="menu_materiales_recepcion" sequence="20" parent="menu_materiales_operaciones"/>
+        <menuitem name="Entrega de Productos" action="materiales_entregaproductos_action" id="menu_materiales_entregaproductos" sequence="40" parent="menu_materiales_operaciones"/>
+        <menuitem name="Movimientos entre Ubicaciones" action="action_movimientos_ubicaciones" id="menu_movimientos_ubicaciones" sequence="50" parent="menu_materiales_operaciones"/>
+        <menuitem name="Catálogo de Productos" action="materiales_catalogoproductos_action" id="menu_materiales_catalogoproductos" sequence="60" parent="menu_materiales_operaciones"/>
+        <menuitem name="Lista de Precios" action="materiales_listaprecios_action" id="menu_materiales_listaprecios" sequence="70" parent="menu_materiales_operaciones"/>
+
+        <!-- Submenú: Mantenimiento -->
+        <menuitem name="Mantenimiento" id="menu_materiales_mantenimiento" parent="menu_materiales" sequence="30"/>
+
+        <menuitem name="Listas de Verificación" action="action_lista_verificacion" id="menu_lista_verificacion" sequence="20" parent="menu_materiales_mantenimiento"/>
+        <menuitem name="Programa de Mantenimiento" action="action_programa_mantenimiento" id="menu_programa_mantenimiento" sequence="30" parent="menu_materiales_mantenimiento"/>                            
+        <menuitem id="menu_materiales_orden_trabajo" name="Orden de Trabajo" parent="menu_materiales_mantenimiento" action="action_materiales_orden_trabajo" sequence="40"/>
+        <menuitem name="Solicitudes de Mantenimiento" action="action_solicitud_mantenimiento" id="menu_solicitud_mantenimiento" sequence="50" parent="menu_materiales_mantenimiento"/>
+        <menuitem name="Evaluación de Proveedores" action="materiales_evaluacion_action" id="menu_materiales_evaluacion" sequence="60" parent="menu_materiales_mantenimiento"/>
+
+        <!-- Submenú: Reportes -->
+        <menuitem name="Reportes" id="menu_materiales_reporte" parent="menu_materiales" sequence="40"/>
+
+        <!-- Definición de la Acción -->
+        <record model="ir.actions.act_window" id="action_report_wizard">
+            <field name="name">Generación de Reportes</field>
+            <field name="res_model">it_materiales.reportes_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Compras" id="menu_reportes_report" parent="menu_materiales_reporte" sequence="10" action="action_report_wizard"/>
+    
+    </data>
+
+</openerp>

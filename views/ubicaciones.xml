@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- Vista tipo tree de  -->
+        <record model="ir.ui.view" id="materiales_ubicaciones_tree">
+            <field name="name">materiales.ubicaciones.tree</field>
+            <field name="model">itsa.materiales.ubicaciones</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="ubicaciones" editable = "bottom">
+                    <field name="name"/>
+                    <field name="departamento_id"/>
+                    <field name="area"/>
+                    <field name="edificio_id"/> 
+                </tree>
+            </field>
+        </record>
+
+        
+
+        <!-- Vista de búsqueda del modelo it_titulaciones.documentos -->
+        <record model="ir.ui.view" id="materiales_ubicaciones_search">
+            <field name="name">materiales.ubicaciones.search</field>
+            <field name="model">itsa.materiales.ubicaciones</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="departamento_id"/>
+                    <field name="area"/>
+                    <field name="edificio_id"/> 
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción para el modelo it_titulaciones.documentos -->
+        <record id="materiales_ubicaciones_action" model="ir.actions.act_window">
+            <field name="name">Ubicaciones</field>
+            <field name="res_model">itsa.materiales.ubicaciones</field>
+            <field name="view_mode">tree</field>
+        </record>
+    </data>
+</openerp>

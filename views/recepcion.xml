@@ -1,0 +1,113 @@
+<openerp>
+    <data>
+        <!-- Acción para abrir la vista de recepción -->
+        <record id="action_materiales_recepcion" model="ir.actions.act_window">
+            <field name="name">Recepciones</field>
+            <field name="res_model">materiales.recepcion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Vista del formulario de recepción de materiales -->
+        <record model="ir.ui.view" id="materiales_recepcion_form">
+            <field name="name">materiales.recepcion.form</field>
+            <field name="model">materiales.recepcion</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Recepción de Materiales">
+                    <header>
+                        <button name="action_cargar_detalles" type="object" string="Cargar Detalles" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                        <!-- <button name="validar_costos" type="object" string="Validar Costos" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'creado')]}"/> -->
+                        <button name="action_comparar_catalogo" type="object" string="Comparar con Catálogo" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                        <button name="action_comparar_productos" type="object" string="Comparar con Productos" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                        <button name="action_aplicar" type="object" string="Aplicar" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                        <button name="action_cancelar" type="object" string="Cancelar" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                        <field name="status" widget="statusbar" statusbar_visible="creado,aplicado,cancelado"/>
+                    </header>
+                    <sheet>
+                        <h1 style="font-size:20px;color:#2E86C1;font-weight:bold;text-align:center">Recepción de Compras</h1>
+                        <group>
+                            <group>
+                                <field name="name" string="Folio" readonly="1"/>
+                                <field name="fecha" string="Fecha de Recepción" readonly="1"/>
+                                <field name="ubicacion_recepcion" string="Ubicación"/>
+                                <field name="numero_factura"/>
+                            </group>
+                            <group>
+                                <field name="compra_ids" widget="many2many_tags" string="Compras Asociadas"/>
+                                <field name="observaciones" string="Observaciones"/>
+                                <field name="total_costo_real" readonly="1" string="Total Costo Real"/>
+
+                            </group>
+
+                        </group>
+                        <group string="Detalles de Recepción">
+                                <field name="detalle_ids3" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="compra_id" string="Compra"/>
+                                        <field name="recepcion_id" string="Recepcion"/>
+                                        <field name="clave" string="Clave Del Producto"/>
+                                        <field name="producto_id" string="Producto"/>
+                                        <field name="cantidad" string="Cantidad"/>
+                                        <field name="costo_estimado" string="Costo Estimado"/>
+                                        <field name="costo_real" string="Costo Real"/>
+                                        <field name="proveedor_id" string="Proveedor"/>
+                                        <field name="descripcion" string="Descripción"/>
+                                    </tree>
+                                </field>
+                        </group>
+
+                        <div class="oe_chatter">
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                        <footer>
+                            <button string="Cerrar" class="oe_link" special="cancel"/>
+                            <button name="action_agregar_impuesto" type="object" string="Agregar IVA" class="btn-primary"/>
+
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de lista para las recepciones -->
+        <record model="ir.ui.view" id="materiales_recepcion_tree">
+            <field name="name">materiales.recepcion.tree</field>
+            <field name="model">materiales.recepcion</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Recepciones">
+                    <field name="name" string="Folio"/>
+                    <field name="fecha" string="Fecha"/>
+                    <field name="compra_ids" widget="many2many_tags" string="Compras"/>
+                    <field name="status" string="Estado"/>
+                    <field name="ubicacion_recepcion" string="Ubicación"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vista de Detalles de Recepción -->
+        <record model="ir.ui.view" id="view_detallerec_form">
+            <field name="name">materiales.detalle.recepcion.form</field>
+            <field name="model">materiales.detalle.recepcion</field>
+            <field name="arch" type="xml">
+                <form string="Detalles de Recepción">
+                    <sheet>
+                        <group>
+                                <field name="compra_id" string="Compra Asociada"/>
+                                <field name="recepcion_id" string="Recepcion"/>
+                                <field name="clave" string="Clave"/>
+                                <field name="producto_id" string="Producto"/>
+                                <field name="cantidad" string="Cantidad"/>
+                                <field name="costo_estimado" string="Costo Estimado"/>
+                                <field name="costo_real" string="Costo Real"/>
+                                <field name="proveedor_id" string="Proveedor"/>
+                                <field name="descripcion" string="Descripción"/> 
+
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>

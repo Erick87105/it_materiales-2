@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- Vista tipo tree del modelo catalogo.productos -->
+        <record model="ir.ui.view" id="catalogoproductos_tree">
+            <field name="name">catalogoproductos.tree</field>
+            <field name="model">catalogo.productos</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Catálogo de Productos">
+                    <field name="clave"/>
+                    <field name="nombre"/>
+                    <field name="precio_actual"/>
+                    <field name="categoria"/>
+                    <field name="subcategoria"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vista tipo form del modelo catalogo.productos -->
+        <record model="ir.ui.view" id="catalogoproductos_form">
+            <field name="name">catalogoproductos.form</field>
+            <field name="model">catalogo.productos</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Catálogo de Productos">
+                    <sheet>
+                        <group>
+                            <field name="clave" readonly="1"/>
+                            <field name="nombre" readonly="1"/>
+                            <field name="precio_actual" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="categoria" readonly="1"/>
+                            <field name="subcategoria" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    
+        <!-- Vista de búsqueda para el modelo catalogo.productos -->
+        <record model="ir.ui.view" id="catalogoproductos_search">
+            <field name="name">catalogoproductos.search</field>
+            <field name="model">catalogo.productos</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Catálogo de Productos">
+                    <field name="clave"/>
+                    <field name="nombre"/>
+                    <field name="precio_actual"/>
+                    <field name="categoria"/>
+                    <field name="subcategoria"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción para el modelo de catalogo.productos -->
+        <record id="materiales_catalogoproductos_action" model="ir.actions.act_window">
+            <field name="name">Catálogo de Productos</field>
+            <field name="res_model">catalogo.productos</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="catalogoproductos_search"/>
+        </record>
+    </data>
+</openerp>

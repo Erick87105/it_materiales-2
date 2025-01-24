@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+         <!-- Vista tree para el modelo lista.verificacion -->
+        <record id="view_lista_verificacion_tree" model="ir.ui.view">
+            <field name="name">lista.verificacion.tree</field>
+            <field name="model">lista.verificacion</field>
+            <field name="arch" type="xml">
+                <tree string="Lista de Verificación">
+                    <field name="name"/>
+                    <field name="area_verificacion"/>
+                    <field name="jefe_area"/>
+                    <field name="fecha"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vista form para el modelo lista.verificacion -->
+        <record id="view_lista_verificacion_form" model="ir.ui.view">
+            <field name="name">lista.verificacion.form</field>
+            <field name="model">lista.verificacion</field>
+            <field name="arch" type="xml">
+                <form string="Lista de verificación">
+                    <header>
+                        <!-- Botones para cambiar de estado -->
+                        <button name="action_verificar" string="Verificar" type="object" states="creado" class="oe_highlight"/>
+                        <button name="action_aplicar" string="Aplicar" type="object" states="verificado" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="creado,verificado,aplicado" statusbar_colors="creado:blue;verificado:orange;aplicado:green"/>
+                    </header>
+                    <sheet>
+                        <h1 style="font-size:20px;color:#2E86C1;font-weight:bold;text-align:center">Lista de Verificación de Infraestructura y Equipo</h1>
+
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="area_verificacion"/>
+                                <field name="jefe_area_verificada"/>
+                            </group>
+                            <group>
+                                <field name="fecha" readonly="1"/>
+                                <field name="jefe_area"/>
+                                <field name="trabajador_area"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Verificación de infraestructura y equipo">
+                                <field name="detalle_ids">
+                                    <tree editable="bottom" string="Detalles">
+                                        <field name="elemento_revisado"/>
+                                        <field name="hallazgo"/>
+                                        <field name="atendido"/>
+                                    </tree>
+                                    <form string="Detalle de Verificación">
+                                        <group>
+                                            <field name="elemento_revisado"/>
+                                            <field name="hallazgo"/>
+                                            <field name="atendido"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista search para el modelo lista.verificacion -->
+        <record id="view_lista_verificacion_search" model="ir.ui.view">
+            <field name="name">lista.verificacion.search</field>
+            <field name="model">lista.verificacion</field>
+            <field name="arch" type="xml">
+                <search string="Buscar en Lista de Verificación">
+                    <field name="name"/>
+                    <field name="area_verificacion"/>
+                    <field name="jefe_area"/>
+                    <field name="fecha"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción para abrir las vistas tree y form -->
+        <record id="action_lista_verificacion" model="ir.actions.act_window">
+            <field name="name">Listas de Verificación</field>
+            <field name="res_model">lista.verificacion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!-- <field name="view_id" ref="view_lista_verificacion_tree"/>
+            <field name="search_view_id" ref="view_lista_verificacion_search"/> -->
+        </record>
+
+    
+    </data>
+</openerp>

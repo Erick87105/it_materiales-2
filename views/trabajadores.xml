@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        
+        <!-- Vista de árbol -->
+        <record id="view_trabajadores_materiales_tree" model="ir.ui.view">
+            <field name="name">trabajadores.materiales.tree</field>
+            <field name="model">trabajadores.materiales</field>
+            <field name="arch" type="xml">
+                <tree string="Trabajadores de Materiales">
+                    <field name="employee_id"/>
+                    <field name="name"/>
+                    <field name="departamento_id"/>
+                    <field name="puesto"/>
+                    <field name="date_hired"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vista de formulario -->
+        <record id="view_trabajadores_materiales_form" model="ir.ui.view">
+            <field name="name">trabajadores.materiales.form</field>
+            <field name="model">trabajadores.materiales</field>
+            <field name="arch" type="xml">
+                <form string="Trabajadores de Materiales">
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="name"/>
+                        <field name="departamento_id"/>
+                        <field name="puesto"/>
+                        <field name="date_hired"/>
+                        <field name="active"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de búsqueda -->
+        <record id="view_trabajadores_materiales_search" model="ir.ui.view">
+            <field name="name">trabajadores.materiales.search</field>
+            <field name="model">trabajadores.materiales</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Trabajadores de Materiales">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="departamento_id"/>
+                    <field name="puesto"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción -->
+        <record id="action_trabajadores_materiales" model="ir.actions.act_window">
+            <field name="name">Trabajadores de Materiales</field>
+            <field name="res_model">trabajadores.materiales</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</openerp>

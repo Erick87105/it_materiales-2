@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- Vista tipo tree del modelo materiales.listaprecios -->
+        <record model="ir.ui.view" id="materiales_listaprecios_tree">
+            <field name="name">materiales.listaprecios.tree</field>
+            <field name="model">materiales.listaprecios</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Lista de Precios">
+                    <field name="fecha"/>
+                    <field name="proveedor_id"/>
+                    <field name="aplicado"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vista tipo form del modelo materiales.listaprecios -->
+        <record model="ir.ui.view" id="materiales_listaprecios_form">
+            <field name="name">materiales.listaprecios.form</field>
+            <field name="model">materiales.listaprecios</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Lista de Precios">
+                    <header>
+                        <button name="actualizar_precio" type="object" string="Actualizar Precio" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <h1 style="font-size:20px;color:#2E86C1;font-weight:bold;text-align:center">Lista de Precios</h1>
+                        <group>
+                            <group>
+                                <field name="fecha" readonly="1"/>
+                                <field name="proveedor_id"/>
+                                <field name="aplicado" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <!-- Página de Detalles de Lista de Precios -->
+                            <page string="Detalles de Lista de Precios">
+                                <field name="line_ids">
+                                    <tree editable="bottom">
+                                        <field name="producto_id"/>
+                                        <field name="clave"/>
+                                        <field name="nombre"/>
+                                        <field name="categoria" readonly="1"/>
+                                        <field name="subcategoria" readonly="1"/>
+                                        <field name="precio_actual"/>
+                                        <field name="nuevo_precio"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <!-- Página para Historial de Precios -->
+                            <page string="Historial de Precios">
+                                <field name="precio_historial_ids">
+                                    <tree editable="bottom">
+                                        <field name="producto_id"/>
+                                        <field name="precio_anterior" readonly="1"/>
+                                        <field name="precio_nuevo" readonly="1"/>
+                                        <field name="fecha_cambio" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de búsqueda para el modelo materiales.listaprecios -->
+        <record model="ir.ui.view" id="materiales_listaprecios_search">
+            <field name="name">materiales.listaprecios.search</field>
+            <field name="model">materiales.listaprecios</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="fecha"/>
+                    <field name="proveedor_id"/>
+                    <field name="aplicado"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción para el modelo de lista de precios -->
+        <record id="materiales_listaprecios_action" model="ir.actions.act_window">
+            <field name="name">Listas de Precios</field>
+            <field name="res_model">materiales.listaprecios</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="materiales_listaprecios_search"/>
+        </record>
+    </data>
+</openerp>

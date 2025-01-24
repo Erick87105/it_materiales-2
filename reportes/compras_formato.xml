@@ -1,0 +1,211 @@
+<openerp>
+    <data>
+        <template id="compras_reporte">
+
+            <style>
+
+                table {
+                    font-family: arial, sans-serif;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+                
+                .header-date {
+                    text-align: right;
+                    font-size: 14px;
+                    font-weight: bold;
+                    margin-right: 0px;
+                    margin-top: 0px;
+                    position: absolute;
+                    right: 0px;
+                    top: 0px;
+                }
+                
+                table.datos {
+                    margin-top: 100px;
+                    margin-bottom: 50px; /*Agrega un espacio para que los datos no peguen con la linea horizontal*/
+                }
+
+                .datos td {
+                    padding: 12px; /* Espaciado interno */
+                    font-family: 'Roboto', sans-serif;
+                    text-align: center; /* Alineación centrada */
+                }
+
+                table .fecha {
+                    width: 100%; /* Anchura de la linea horizontal */
+                }
+
+                .fecha th {
+                    border-top: 1px solid black; /* Agrega una línea superior negra */
+                    padding-top: 40px; /* Agrega un espacio en la parte superior de la fecha */                
+                
+                }
+
+
+                table.servicio {
+                    margin-top: 50px;
+                }
+
+                .servicio th {
+                    padding: 8px; /* Espaciado interno */
+                    text-align: center;
+                }
+
+                .servicio td {
+                    padding: 0px; /* Espaciado interno */
+                    text-align: center;
+                }
+                
+                .contenedor {
+                    margin-top: 30px;
+                    text-align: center;
+                    color: black;
+                    font-family: 'Lora', serif;
+                    font-weight: 70;
+                }
+
+                .rounded-header {
+                    border: 2px solid black; /* Borde alrededor del texto */
+                    border-radius: 15px; /* Hace los bordes redondeados */
+                    padding: 5px; /* Espaciado interno para que el texto no toque el borde */
+                    display: inline-block; /* Para ajustar el tamaño al contenido */
+                }
+
+                div .footer {
+                    bottom: 0; /*Coloca el pie de página exactamente en la parte inferior.*/
+                    position: fixed;
+                }
+
+            
+
+            </style>
+
+            <t t-call="report.html_container">
+
+                <t t-foreach="docs" t-as="o">
+
+                    <div class="header">
+
+                        <table style="border-collapse: collapse; margin-top:20px;">
+                            <tr>
+                                <!-- Celda para la primera imagen a la izquierda -->
+                                <td style="border: none; width: 50%; text-align: left; border-right: 1px solid black;">
+
+                                    <p style="height:90px; width:150px; margin:5px;">
+                                        <img src="/it_materiales/static/description/img/ITS_Apatzingan.png" alt="logo" width="50%" height="100%" />
+                                    </p>
+
+                                </td>
+
+                                <!-- Celda para la segunda imagen a la derecha -->
+                                <td style="border: none; width: 50%; text-align: right;">
+
+                                    <p style="height:100px; width:300px; margin:5px;">
+                                        <img src="/it_materiales/static/description/img/logo.png" alt="otro_logo" width="50%" height="100%" />
+                                    </p>
+
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="header-date">
+                            <span t-esc="datetime.datetime.today().strftime('%d/%m/%Y')"/>
+                        </div>
+
+                    </div>
+
+                    <div class="page">
+
+                    
+                        <table class="datos">
+
+                            <tbody>
+
+                                <tr>
+                                    <td style="width: 30%; font-weight: bold;">Proveedor:</td>
+                                    <td style="width: 20%;"><t t-esc="o.proveedor_id.name"/></td>
+                                    <td style="width: 30%; font-weight: bold;">Total real:</td>
+                                    <td style="width: 10%;"><t t-esc="o.totalr"/></td>                                            
+                                    <!-- <td style="width: 20%; font-weight: bold;">Requisiciones:</td> -->
+
+<!-- t-foreach="o.requisicion_ids": Indica que estás iterando sobre requisicion_ids, es decir, recorriendo la lista de requisiciones.
+t-as="requisicion": Cada elemento de la lista se guarda en la variable requisicion para que puedas acceder a sus datos. -->
+
+                                    <!-- <t t-foreach="o.requisicion_ids" t-as="requisicion">
+
+                                        <td style="width: 10%;"><t t-esc="requisicion.name"/></td>
+
+                                    </t> -->
+
+                                </tr>
+
+                                <tr>
+                                    <td style="width: 30%; font-weight: bold;">Total estimado:</td>
+                                    <td style="width: 20%;"><t t-esc="o.total"/></td> 
+                                </tr>
+
+                            </tbody>   
+
+                        </table>     
+
+                        <table class="fecha">
+                            <thead>
+                                <tr>
+                                    <th style="width:15%">Fecha de Elaboración de la Compra:</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td><t t-esc="o.fecha"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <table class="servicio">
+
+                        <div class="contenedor">
+                            <h3 class="rounded-header">Compra: <t t-esc="o.name"/></h3>
+                        </div>
+
+                            <thead>
+                                <tr>
+                                    <th style="width:70%; text-align: left;">Descripcion</th>
+                                    <th style="width:15%">Cantidad</th>
+                                    <!-- <th style="width:15%">Costo Estimado</th> -->
+                                    <th style="width:15%">Costo Real</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <t t-foreach="o.compra_detalle_ids" t-as="detalle">
+                                    <tr>
+                                        <td style="text-align: left;"><t t-esc="detalle.producto"/></td>
+                                        <td><t t-esc="detalle.cantidad"/></td>
+                                        <td><t t-esc="detalle.costo_estimado"/></td>
+                                        <td><t t-esc="detalle.importe_real"/></td>
+                                    </tr>
+                                </t>
+
+                            </tbody>
+                                    
+
+                        </table>
+
+                    </div>
+
+                    <div class="footer">
+
+                        <h5 style="text-align: center; border-top: 1px solid black; padding-top: 40px;">
+                            <strong><span> Página </span><span class="page"/> de <span class="topage"/></strong>
+                        </h5>
+
+                    </div>
+                    
+                </t>
+            </t>             
+        </template>
+    </data>
+</openerp>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Vista de árbol para el modelo de detalle -->
+        <record model="ir.ui.view" id="view_programa_mantenimiento_tree">
+            <field name="name">programa.mantenimiento.tree</field>
+            <field name="model">programa.mantenimiento</field>
+            <field name="arch" type="xml">
+                <tree string="Programa de mantenimiento preventivo de infraestructura y equipo">
+                    <field name="semestre"/>
+                    <field name="ano"/>
+                    <field name="elaborado_por"/>
+                    <field name="aprobado_por"/>
+                    <field name="fecha_elaboracion"/>
+                    <field name="fecha_aprobacion"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_programa_mantenimiento_form" model="ir.ui.view">
+            <field name="name">programa.mantenimiento.form</field>
+            <field name="model">programa.mantenimiento</field>
+            <field name="arch" type="xml" >
+                <form >
+                    <sheet>
+                        <h1 style="font-size:20px;color:#2E86C1;font-weight:bold;text-align:center">Programa de Mantenimiento Preventivo de Infraestructura y Equipo</h1>
+                        <group colspan="2" >
+                            <group col="2">
+                                <field name="ano"/>
+                                <field name="elaborado_por"/>
+                                <field name="aprobado_por"/>
+                            </group>
+                            <group>
+                                <field name="semestre"/>
+                                <field name="fecha_elaboracion"/>
+                                <field name="fecha_aprobacion"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Detalles de servicios">
+                                <field name="mantenimiento_ids">
+                                    <tree editable="bottom">
+                                        <field name="service_number"/>
+                                        <field name="servicio"/>
+                                        <field name="tipo"/>
+                                        <field name="status"/>
+                                        <field name="ene"/>
+                                        <field name="feb"/>
+                                        <field name="mar"/>
+                                        <field name="abr"/>
+                                        <field name="may"/>
+                                        <field name="jun"/>
+                                        <field name="jul"/>
+                                        <field name="ago"/>
+                                        <field name="sep"/>
+                                        <field name="oct"/>
+                                        <field name="nov"/>
+                                        <field name="dic"/>
+                                        
+
+                                    </tree>
+                                </field>
+                            </page>
+                            <!-- Aquí puedes agregar más páginas o pestañas adicionales según sea necesario -->
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Vista de búsqueda -->
+        <record id="view_programa_mantenimiento_search" model="ir.ui.view">
+            <field name="name">programa.mantenimiento.search</field>
+            <field name="model">programa.mantenimiento</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Programa de Mantenimiento">
+                    <field name="semestre"/>
+                    <field name="ano"/>
+                    <field name="elaborado_por"/>
+                    <field name="aprobado_por"/>
+                    <field name="fecha_elaboracion"/>
+                    <field name="fecha_aprobacion"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción para abrir la vista de formulario -->
+        <record id="action_programa_mantenimiento" model="ir.actions.act_window">
+            <field name="name">Programa de mantenimiento preventivo de infraestructura y equipo</field>
+            <field name="res_model">programa.mantenimiento</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+             <!-- Reporte-Genera el boton de imprimir-->
+        <report id="custom_programa_mantenimiento" model="programa.mantenimiento"
+            string="Programa De Mantenimiento" report_type="qweb-pdf" name="it_materiales.solicitud_reporte_programa" attachment_use="False" file="programa_mantenimiento_reporte" />
+        
+        <record id="reporte_mantenimiento" model="report.paperformat">
+            <field name="name">PROGRAMA DE MANTENIMIENTO</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">279</field>
+            <field name="page_width">215</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">60</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">51</field>
+            <field name="footer_spacing">30</field>
+            <field name="dpi">80</field>
+        </record>
+
+        <record id="it_materiales.custom_programa_mantenimiento" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="it_materiales.reporte_mantenimiento"/>
+        </record>
+       
+    </data>
+</openerp>

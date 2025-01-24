@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- Vista tipo tree del modelo materiales.compras -->
+        <record model="ir.ui.view" id="materiales_compras_tree">
+            <field name="name">materiales.compras.tree</field>
+            <field name="model">materiales.comprados</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Compras" >
+                    <field name="name"/>
+                    <field name="fecha"/>
+                    <field name="proveedor_id"/>
+                    <field name="status" widget="statusbar"/>
+                    <field name="total"/>
+                    <field name="totalr"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="materiales_compras_form">
+            <field name="name">materiales.compras.form</field>
+            <field name="model">materiales.comprados</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Compras">
+
+                    <header>
+                        <button name="action_confirm" type="object" string="Confirmar compra" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                        <button name="action_cancel" type="object" string="Cancelar" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'pedido')]}"/>
+                        <button name="copy_requisiciones_to_detalle" type="object" string="Copiar detalles de requisiciones" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                        
+                        <field name="status" widget="statusbar" statusbar_visible="creado,pedido,recibido,cancelado"/>
+                    </header>
+
+                    <sheet>
+                        <h1 style="font-size:20px;color:#2E86C1;font-weight:bold;text-align:center">Compras de Productos o Servicios</h1>
+
+                        <group >
+                            <group>
+                                <field name="name"/>
+                                <field name="proveedor_id" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                                <field name="total" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="fecha"/>
+                                <field name="requisicion_ids" widget="many2many_tags" attrs="{'invisible': [('status', '!=', 'creado')]}"/> 
+                                <field name="totalr" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Detalles de Compra">
+                                <field name="compra_detalle_ids" attrs="{'readonly': [('status', 'in', ['pedido', 'recibido'])]}">
+                                    <tree editable="bottom">
+                                        <field name="req_id"/>
+                                        <field name="producto"/>
+                                        <field name="cantidad"/>
+                                        <field name="costo_estimado"/>
+                                        <field name="importe_real"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de búsqueda del modelo materiales.compras -->
+        <record model="ir.ui.view" id="materiales_compras_search">
+            <field name="name">materiales.compras.search</field>
+            <field name="model">materiales.comprados</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="fecha" />
+                    <field name="proveedor_id" />
+                    <field name="status" />
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción para el modelo de compras -->
+        <record id="materiales_compras_action" model="ir.actions.act_window">
+            <field name="name">Compras</field>
+            <field name="res_model">materiales.comprados</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Genera el boton del reporte(imprimir) y proporciona el formato para poder generar el reporte en pdf-->
+        <report id="custom_compras" model="materiales.comprados"
+            string="Reporte de Compras" report_type="qweb-pdf" name="it_materiales.compras_reporte" attachment_use="False" file="compras_reporte" />
+        <!-- genera el formato que tendra la hoja del pdf, medidas, etc. -->
+        <record id="reporte_compras" model="report.paperformat">
+            <field name="name">Compras</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">279</field>
+            <field name="page_width">215</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">60</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">51</field>
+            <field name="footer_spacing">30</field>
+            <field name="dpi">80</field>
+        </record>
+
+        <record id="it_materiales.custom_compras" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="it_materiales.reporte_compras"/>
+        </record>
+        
+        <!-- genera el formato que tendra la hoja del pdf, medidas, etc. -->
+        <record id="reporte_lista_compras" model="report.paperformat">
+            <field name="name">Prestamos</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">279</field>
+            <field name="page_width">215</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">35</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">32</field>
+            <field name="footer_spacing">30</field>
+            <field name="dpi">80</field>
+        </record>
+
+        <!-- Definición del informe -->
+        <record id="compras_report" model="ir.actions.report.xml">
+            <field name="name">Prestamos Report</field>
+            <field name="model">materiales.comprados</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">it_materiales.lista_compras</field>
+            <field name="file">it_materiales.report_compras</field>
+            <field name ='paperformat_id' ref='it_materiales.reporte_lista_compras'/>
+        </record>
+    </data>
+</openerp>

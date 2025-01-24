@@ -1,0 +1,269 @@
+<openerp>
+    <data>
+        <template id="solicitud_reporte_programa">
+
+            <style>
+
+                table {
+                    font-family: arial, sans-serif;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                .miTabla tr:nth-child(odd) {
+                    background-color: #EFEFF7; 
+                }
+
+                .miTabla tr:nth-child(even) {
+                    background-color: #FFFFFF; 
+                }
+
+                .miTabla .columnas th, .miTabla .filas td {
+                    text-align: center;
+                    vertical-align: middle;
+                    padding: 4px 7px;
+                    font-size: 11px;
+                }
+                
+                .header-date {
+                    text-align: right;
+                    font-size: 14px;
+                    font-weight: bold;
+                    margin-right: 0px;
+                    margin-top: 0px;
+                    position: absolute;
+                    right: 0px;
+                    top: 0px;
+                }
+
+                h5 {
+                    text-align: center;
+                    font-weight: bold;
+                    font-family: 'Lora', serif;
+                    margin-top: 50px;
+                    height: 110px; /*Agrega un espacio, solo por debajo del contenido */
+                }
+
+                h3 {
+                    text-align: center;
+                    font-family: 'Lora', serif;
+                    font-weight: 700; /* Hace que la fuente sea más gruesa para títulos */
+                    margin-top: 50px;
+                    height: 60px;
+                }
+                
+                table.servicio {
+                    width: 100%;
+                    margin-bottom: 4px;
+                    font-family: 'Roboto', sans-serif;
+                }
+
+                table.servicio td {
+                    padding: 2px;
+                    border: 1px solid #ccc; /* Añadir bordes suaves */
+                }
+
+                table.servicio strong {
+                    font-weight: bold;
+                    color: #333; /* Color es oscuros para las etiquetas */
+                }
+
+                .table-meses {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                }
+
+                .table-meses th, .table-meses td {
+                    padding: 6px 10px;
+                    border: 1px solid #ccc; /* Bordes sutiles */
+                    text-align: left; /* Alinear texto a la izquierda */
+                }
+
+                .table-meses th {
+                    background-color: #f2f2f2;
+                    font-weight: bold;
+                    text-align: center;
+                }
+
+                .table-meses td.mes, .table-meses td.dato {
+                    font-weight: bold;
+                    text-align: center;
+                }
+
+                .table-meses tr:nth-child(even){
+                    background-color: #e9e9e9; /* Color de fondo alterno para filas pares */
+                }
+
+                div .footer {
+                    bottom: 0; /*Coloca el pie de página exactamente en la parte inferior.*/
+                    position: fixed;
+                }
+
+            
+
+            </style>
+
+            <div id="contenedor">
+
+                <div class="header">
+
+                    <table style="border-collapse: collapse; margin-top:20px;">
+                        <tr>
+                            <!-- Celda para la primera imagen a la izquierda -->
+                            <td style="border: none; width: 50%; text-align: left; border-right: 1px solid black;">
+
+                                <p style="height:90px; width:150px; margin:5px;">
+                                    <img src="/it_materiales/static/description/img/ITS_Apatzingan.png" alt="logo" width="50%" height="100%" />
+                                </p>
+
+                            </td>
+
+                            <!-- Celda para la segunda imagen a la derecha -->
+                            <td style="border: none; width: 50%; text-align: right;">
+
+                                <p style="height:100px; width:300px; margin:5px;">
+                                    <img src="/it_materiales/static/description/img/logo.png" alt="otro_logo" width="50%" height="100%" />
+                                </p>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="header-date">
+                        <span t-esc="datetime.datetime.today().strftime('%d/%m/%Y')"/>
+                    </div>
+
+                    <h5>Programa de Mantenimiento Preventivo de Infraestructura y Equipo</h5>
+
+                </div>
+
+                <div class="page">
+
+                    <table class="miTabla">
+                        <thead>
+                            <tr class="columnas">
+                                <th style="width:10%">Semestre</th>
+                                <th style="width:10%">Año</th>
+                                <th style="width:25%">Elaborado por</th>
+                                <th style="width:25%">Aprobado por</th>
+                                <th style="width:15%">Fecha de Elaboración</th>
+                                <th style="width:15%">Fecha de Aprobación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="o">
+                                <tr class="filas">
+                                    <td><t t-esc="o.semestre"/></td>
+                                    <td><t t-esc="o.ano"/></td>
+                                    <td><t t-esc="o.elaborado_por.name"/></td>
+                                    <td><t t-esc="o.aprobado_por.name"/></td>
+                                    <td><t t-esc="o.fecha_elaboracion"/></td>
+                                    <td><t t-esc="o.fecha_aprobacion"/></td>
+                                </tr>
+
+                                <t t-foreach="o.mantenimiento_ids" t-as="detalle">
+                                   
+                                    <table class="servicio">
+
+                                        <h3>Detalles del Servicio <t t-esc="detalle.service_number"/></h3>
+
+                                        <tr>
+                                            <td><strong>Descripción del Servicio:</strong></td>
+                                            <td><t t-esc="detalle.servicio"/></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Tipo de Servicio:</strong></td>
+                                            <td><t t-esc="detalle.tipo"/></td>
+                                        </tr>
+
+                                         <tr>
+                                            <td><strong>Estado del Servicio:</strong></td>
+                                            <td><t t-esc="detalle.status"/></td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td><strong>Meses requeridos, para realizar el Servicio:</strong></td>
+                                        </tr>
+                                    </table>
+                                    
+                                      <!-- Nueva tabla para los meses -->
+                                    <table class="table-meses">
+                                    
+                                        <tr>
+                                            <th>Mes</th>
+                                            <th>Requerido "X"</th>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="mes">Enero</td>
+                                            <td class="dato"><t t-esc="detalle.ene and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Febrero</td>
+                                            <td class="dato"><t t-esc="detalle.feb and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Marzo</td>
+                                            <td class="dato"><t t-esc="detalle.mar and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Abril</td>
+                                            <td class="dato"><t t-esc="detalle.abr and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Mayo</td>
+                                            <td class="dato"><t t-esc="detalle.may and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Junio</td>
+                                            <td class="dato"><t t-esc="detalle.jun and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Julio</td>
+                                            <td class="dato"><t t-esc="detalle.jul and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Agosto</td>
+                                            <td class="dato"><t t-esc="detalle.ago and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Septiembre</td>
+                                            <td class="dato"><t t-esc="detalle.sep and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Octubre</td>
+                                            <td class="dato"><t t-esc="detalle.oct and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Noviembre</td>
+                                            <td class="dato"><t t-esc="detalle.nov and 'X' or ''"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mes">Diciembre</td>
+                                            <td class="dato"><t t-esc="detalle.dic and 'X' or ''"/></td>
+                                        </tr>
+                                        
+                                    </table>
+
+                                </t>                                
+                            </t>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="footer">
+
+                    <h5 style="text-align: center;">
+                        <span> Página </span><span class="page"/> de <span class="topage"/>
+                    </h5>
+
+				</div>
+                    
+            </div>
+
+        </template>
+    </data>
+</openerp>

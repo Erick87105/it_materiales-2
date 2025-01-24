@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- Vista tipo tree del modelo materiales.comprados -->
+        <record model="ir.ui.view" id="materiales_comprados_tree">
+            <field name="name">materiales.comprados.tree</field>
+            <field name="model">materiales.comprados</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Compras">
+                    <field name="name"/>
+                    <field name="fecha"/>
+                    <field name="proveedor_id"/>
+                    <field name="status" widget="statusbar"/>
+                    <field name="total"/>
+                    <field name="totalr"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vista tipo form del modelo materiales.comprados -->
+        <record model="ir.ui.view" id="materiales_comprados_form">
+            <field name="name">materiales.comprados.form</field>
+            <field name="model">materiales.comprados</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Compras">
+                    <header>
+                        <row>
+                            <field name="status" widget="statusbar"/>
+                            <button name="action_confirm" type="object" string="Confirmar compra" status="creado" class="oe_highlight"/>
+                            <button name="action_cancel" type="object" string="Cancelar" status="creado,pedido,recibido" class="oe_highlight"/>
+                        </row>
+                    </header>
+                    <sheet>
+                        <group string="Información de Compra">
+                            <field name="name"/>
+                            <field name="fecha"/>
+                            <field name="proveedor_id"/>
+                            <field name="requisicion_id"/>
+                            <field name="total"/>
+                            <field name="totalr"/>
+                        </group>
+                        <notebook>
+                            <page string="Detalles de Requisición">
+                                <field name="requisiciones_det" widget="many2many">
+                                    <tree editable="bottom">
+                                        <field name="producto_id"/>
+                                        <field name="cantidad"/>
+                                        <field name="costo"/>
+                                        <field name="importe"/>
+                                        <field name="importe_real"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <!-- Nueva página para Detalles de Compra -->
+                            <page string="Detalles de Compra">
+                                <field name="compra_detalle_ids">
+                                    <tree readonly="1">
+                                        <field name="producto"/>
+                                        <field name="cantidad"/>
+                                        <field name="costo_estimado"/>
+                                    </tree>
+                                    <form readonly="1">
+                                        <group>
+                                            <field name="producto"/>
+                                            <field name="cantidad"/>
+                                            <field name="costo_estimado"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de búsqueda del modelo materiales.comprados -->
+        <record model="ir.ui.view" id="materiales_comprados_search">
+            <field name="name">materiales.comprados.search</field>
+            <field name="model">materiales.comprados</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Compras">
+                    <field name="name"/>
+                    <field name="fecha"/>
+                    <field name="proveedor_id"/>
+                    <field name="status"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción para el modelo de compras -->
+        <record id="materiales_compras_action" model="ir.actions.act_window">
+            <field name="name">Compras</field>
+            <field name="res_model">materiales.comprados</field>
+            <field name="view_mode">tree,form</field>
+        </record> 
+
+    </data>
+</openerp>
+
+
+
+# -*- coding: utf-8 -*-
+
+from openerp import models, fields, api
+
+class Requisiciones(models.Model):
+    _inherit = 'itsa.planeacion.requisiciones'
+    
+class Requisiciones_det(models.Model):
+    _inherit = 'itsa.planeacion.requisiciones_det'
+
+
+class Compras(models.Model):
+    _name = 'materiales.comprados'
+
+    STATUS_SELECTION = [
+        ('creado', 'Creado'),
+        ('pedido', 'Pedido'),
+        ('recibido', 'Recibido'),
+        ('cancelado', 'Cancelado'),
+    ]
+
+    name = fields.Char(string='Folio', readonly=True)
+    fecha = fields.Datetime(string='Fecha y hora', default=fields.Datetime.now, readonly=True)
+    proveedor_id = fields.Many2one('materiales.proveedor', string='Proveedor', required=True)
+    requisicion_id = fields.Many2one('itsa.planeacion.requisiciones', string='Requisición', required=True)
+    requisiciones_det = fields.Many2many('itsa.planeacion.requisiciones_det', 'compras_det_requisicion_det', 'com_id', 'req_id', string='Detalles de Requisición')
+    status = fields.Selection(STATUS_SELECTION, string='Estado', default='creado')
+
+    total = fields.Float(string='Total estimado', compute='_compute_costo_estimado', store=True)
+    totalr = fields.Float(string='Total real', compute='_compute_total', store=True)
+
+    @api.depends('requisiciones_det.importe')
+    def _compute_costo_estimado(self):
+        for compra in self:
+            total = sum(detalle.importe for detalle in compra.requisiciones_det)
+            compra.total = total
+
+    @api.depends('requisiciones_det.importe_real')
+    def _compute_total(self):
+        for compra in self:
+            totalr = sum(detalle.importe_real for detalle in compra.requisiciones_det)
+            compra.totalr = totalr
+
+    @api.multi
+    def action_confirm(self):
+        self.write({'status': 'pedido'})
+
+    @api.multi
+    def action_receive(self):
+        self.write({'status': 'recibido'})
+
+    @api.multi
+    def action_cancel(self):
+        self.write({'status': 'cancelado'})
+            
+    @api.model
+    def create(self, vals):
+        vals['name'] = self.env['ir.sequence'].next_by_code('Foliocompras')
+        return super(Compras, self).create(vals)
+    
+    compra_detalle_ids = fields.One2many('materiales.comprasdetalle', 'compra_id', string='Detalles de Compra')
+
+    @api.multi
+    def copy_requisiciones_to_detalle(self):
+        for compra in self:
+            detalles = []
+            for requisicion_det in compra.requisiciones_det:
+                detalle_vals = {
+                    'compra_id': compra.id,
+                    'producto': requisicion_det.producto_id,
+                    'cantidad': requisicion_det.cantidad,
+                    'costo_estimado': requisicion_det.importe,
+                }
+                detalles.append((0, 0, detalle_vals))
+            compra.write({'compra_detalle_ids': detalles})
+
+class ComprasDetalle(models.Model):
+    _name = 'materiales.comprasdetalle'
+
+    compra_id = fields.Many2one('materiales.comprados', string='Compra', required=True)
+    producto = fields.Char(string='Producto', required=True, readonly=True)
+    cantidad = fields.Integer(string='Cantidad', required=True, readonly=True)
+    costo_estimado = fields.Float(string='Costo Estimado', required=True, readonly=True)
+
+<?xml version="1.0"?>
+<form create="0" edit="0" string="Module">
+                    <link rel="stylesheet" href="/base/static/src/css/description.css"/>
+                    <sheet>
+                    <field name="icon_image" widget="image" class="oe_avatar oe_left"/>
+                    <div class="oe_title">
+                        <h1><field name="shortdesc"/></h1>
+                        <h3 class="oe_fade">
+                            By <field name="author" class="oe_inline"/>
+                        </h3>
+                        <div>
+                            <button name="button_immediate_install" states="uninstalled" string="Install" type="object" class="oe_highlight"/>
+                            <button name="button_immediate_upgrade" states="installed" string="Upgrade" type="object" class="oe_highlight"/>
+                        <button name="button_uninstall" states="installed" string="Uninstall" type="object"/>
+                            <button name="button_uninstall_cancel" states="to remove" string="Cancel Uninstall" type="object"/>
+                            <button name="button_upgrade_cancel" states="to upgrade" string="Cancel Upgrade" type="object"/>
+                            <button name="button_install_cancel" states="to install" string="Cancel Install" type="object"/>
+                        </div>
+                    </div>
+                    <div class="oe_clear"/>
+                    <notebook groups="base.group_no_one">
+                        <page string="Information">
+                            <group>
+                                <group>
+                                    <field name="website" widget="url" attrs="{'invisible':[('website','=',False)]}"/>
+                                    <field name="category_id" widget="selection"/>
+                                    <field name="summary"/>
+                                </group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="license"/>
+                                    <field name="installed_version"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Technical Data">
+                            <group col="4">
+                                <field name="demo"/>
+                                <field name="application"/>
+                                <field name="state"/>
+                            </group>
+                            <group string="Created Views" attrs="{'invisible':[('state','!=','installed')]}"/>
+                            <p class="oe_grey" attrs="{'invisible': ['|',('views_by_module','not in',[None,False]),('state','!=','installed')]}"> -This module does not create views.</p>
+                            <field name="views_by_module"/>
+                            <group string="Dependencies"/>
+                            <p class="oe_grey" attrs="{'invisible': [('dependencies_id','not in',[None,False])]}"> -This module does not depends on any other module.</p>
+                            <field name="dependencies_id">
+                                <tree string="Dependencies">
+                                    <field name="name"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Installed Features" attrs="{'invisible':[('state','!=','installed')]}">
+                            <group string="Created Menus"/>
+                            <p class="oe_grey" attrs="{'invisible': [('menus_by_module','not in',[None,False])]}"> -This module does not create menu.</p>
+                            <field name="menus_by_module"/>
+                            <group string="Defined Reports"/>
+                            <p class="oe_grey" attrs="{'invisible': [('reports_by_module','not in',[None,False])]}"> -This module does not create report.</p>
+                            <field name="reports_by_module"/>
+                        </page>
+                    </notebook>
+                    <field name="description_html" class="oe_styling_v8"/>
+                    </sheet>
+                </form>
+
+
+<menuitem id="menu_solicitud_mantenimiento" name="Solicitudes de Mantenimiento" action="action_solicitud_mantenimiento" sequence="51" parent="menu_materiales_procesos"/>
+            <menuitem id="menu_lista_verificacion" name="Listas de Verificación" action="action_lista_verificacion" sequence="52" parent="menu_materiales_procesos"/>
+            <menuitem id="menu_programa_mantenimiento" name="Programa de Mantenimiento" action="action_programa_mantenimiento" sequence="53" parent="menu_materiales_procesos"/>                            
+            <!-- <menuitem name="Programa" action="materiales_programa_action" id="menu_materiales_programa" sequence="60" parent="menu_materiales_procesos"/> -->
+            <menuitem name="Evaluacion de proveedores" action="materiales_evaluacion_action" id="menu_materiales_evaluacion" sequence="70" parent="menu_materiales_procesos"/>
+        
+    </data>
+</openerp> 
+
+
+
+notas para errores
+root@1efaf8acbef1:/# cat /var/lib/odoo/odoo-server.log

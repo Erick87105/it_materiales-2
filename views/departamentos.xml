@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- Vista tipo tree para materiales.departamento -->
+        <record id="view_departamento_tree" model="ir.ui.view">
+            <field name="name">departamento.tree</field>
+            <field name="model">materiales.departamento</field>
+            <field name="arch" type="xml">
+                <tree string="Departamentos" editable="bottom">
+                    <field name="departamento_id"/>
+                    <field name="nombre_departamento"/>
+                    <field name="titular"/>
+                    <field name="correo"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Acción para el modelo materiales.departamento -->
+        <record id="action_departamento" model="ir.actions.act_window">
+            <field name="name">Departamentos</field>
+            <field name="res_model">materiales.departamento</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click para crear un nuevo departamento.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menú para materiales.departamento -->
+    </data>
+</openerp>

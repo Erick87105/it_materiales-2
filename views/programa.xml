@@ -1,0 +1,65 @@
+<openerp>
+    <data>
+        
+        <!-- Vista de árbol del modelo maintenance.program -->
+        <record model="ir.ui.view" id="maintenance_program_tree_view">
+            <field name="name">maintenance.program.tree</field>
+            <field name="model">materiales.programa</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="semester"/>
+                    <field name="year"/>
+                    <field name="elaborated_by"/>
+                    <field name="approved_by"/>
+                    <field name="date_elaborated"/>
+                    <field name="date_approved"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vista tipo formulario del modelo maintenance.program -->
+        <record model="ir.ui.view" id="maintenance_program_form_view">
+            <field name="name">materiales.programa.form</field>
+            <field name="model">materiales.programa</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Programa de Mantenimiento Preventivo">
+                    <sheet>
+                        <group>
+                            <field name="semester"/>
+                            <field name="year"/>
+                            <field name="elaborated_by"/>
+                            <field name="approved_by"/>
+                            <field name="date_elaborated"/>
+                            <field name="date_approved"/>
+                        </group>
+                        <notebook>
+                            <page string="Servicios">
+                                <field name="services" widget="one2many_list">
+                                    <tree editable = "bottom">
+                                        <field name="service_number"/>
+                                        <field name="description"/>
+                                        <field name="service_type"/>
+                                        <field name="maintenance_type"/>
+                                        <field name="schedule_date"/>
+                                        <field name="execution_date"/>
+                                        <field name="reschedule_cause"/>
+                                        <field name="reschedule_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+     <!-- Acción para el modelo it_titulaciones.documentos -->
+        <record id="materiales_programa_action" model="ir.actions.act_window">
+            <field name="name">Programa de mantenimiento</field>
+            <field name="res_model">materiales.programa</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</openerp>

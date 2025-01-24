@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- Definición de una vista de formularios para la evaluación de proveedores -->
+        <record model="ir.ui.view" id="materiales_evaluacion_tree_view">
+            <field name="name">materiales.evaluacion.tree</field>
+            <field name="model">materiales.evaluacion</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="nombre_empresa" string="Nombre de la Empresa"/>
+                    <field name="domicilio"/>
+                    <field name="correo"/>
+                    <field name="representante"/>
+                    <field name="ciudad"/>
+                    <field name="telefono"/>
+                    <field name="rfc"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Definición de una vista de formularios para la evaluación de proveedores -->
+        <record model="ir.ui.view" id="materiales_evaluacion_form_view">
+            <field name="name">materiales.evaluacion.form</field>
+            <field name="model">materiales.evaluacion</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Evaluación de Proveedores">
+                    <sheet>
+                        <h1 style="font-size:20px;color:#2E86C1;font-weight:bold;text-align:center">Evaluación de Proveedores de Procesos y Servicios Externos</h1>
+
+                        <group>
+                            <group>
+                                <!-- Modificar el campo para mostrar el nombre de la empresa -->
+                                <field name="proveedor_id" string="Proveedor" options='{"no_open": True}'/>
+                                <!-- Campo de solo lectura para mostrar el nombre de la empresa -->
+                                <field name="nombre_empresa" string="Nombre de la Empresa" readonly="1"/>
+                                <field name="domicilio" readonly="1"/>
+                                <field name="correo" readonly="1"/>
+                            </group>
+                            <group> 
+                                <field name="representante" readonly="1"/>
+                                <field name="ciudad" readonly="1"/>
+                                <field name="telefono" readonly="1"/>
+                                <field name="rfc" readonly="1"/>
+                            </group>
+                        </group>    
+                        <group string="CRITERIOS">
+                            <!-- Campos para los criterios de evaluación -->
+                            <field name="criterio_1"/>
+                            <field name="criterio_2"/>
+                            <field name="criterio_3"/>
+                            <field name="criterio_4"/>
+                            <field name="criterio_5"/>
+                            <field name="criterio_6"/>
+                            <field name="criterio_7"/>
+                            <field name="criterio_8"/>
+                            <field name="criterio_9"/>
+                            <field name="criterio_10"/>
+
+                            
+                        </group>
+
+                        <group>
+                            <group>
+                                <field name="comentarios"/>
+
+                            </group>
+                            <group>
+                                <field name="evaluacion_obtenida"/>
+
+                            </group>
+                        </group>    
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Acción para abrir la vista de detalles desde la vista principal -->
+        <record id="materiales_evaluacion_action" model="ir.actions.act_window">
+            <field name="name">Evaluación de proveedores de procesos y servicios externos</field>
+            <field name="res_model">materiales.evaluacion</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="materiales_evaluacion_tree_view"/>
+        </record>
+
+        
+             <!-- Genera el boton de solicitud-->
+        <report id="custom_evaluacion" model="materiales.evaluacion"
+            string="Evaluacion de Proveedores" report_type="qweb-pdf" name="it_materiales.evaluacion_reporte" attachment_use="False" file="evaluacion_reporte" />
+        
+        <record id="reporte_evaluacion" model="report.paperformat">
+            <field name="name">PROGRAMA DE MANTENIMIENTO</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">279</field>
+            <field name="page_width">215</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">60</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">51</field>
+            <field name="footer_spacing">30</field>
+            <field name="dpi">80</field>
+        </record>
+
+        <record id="it_materiales.custom_evaluacion" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="it_materiales.reporte_evaluacion"/>
+        </record>
+               
+    </data>
+</openerp>

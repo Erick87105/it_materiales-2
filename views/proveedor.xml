@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- Vista tipo tree proveedores -->
+        <record model="ir.ui.view" id="materiales_proveedor_tree">
+            <field name="name">materiales.proveedor.tree</field>
+            <field name="model">materiales.proveedor</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="proveedor" editable = "bottom">
+                    <field name="rfc"/>
+                    <field name="name"/>
+                    <field name="domicilio"/>
+                    <field name="correo"/>
+                    <field name="representante"/>
+                    <field name="ciudad"/>
+                    <field name="telefono"/>
+                
+                </tree>
+            </field>
+        </record>
+
+        
+
+        <!-- Vista de búsqueda del modelo it_titulaciones.documentos -->
+        <record model="ir.ui.view" id="materiales_proveedor_search">
+            <field name="name">materiales.proveedor.search</field>
+            <field name="model">materiales.proveedor</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="rfc"/>
+                    <field name="representante"/>
+                    <field name="ciudad"/>
+                    <field name="telefono"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción para el modelo it_titulaciones.documentos -->
+        <record id="materiales_proveedor_action" model="ir.actions.act_window">
+            <field name="name">Proveedores</field>
+            <field name="res_model">materiales.proveedor</field>
+            <field name="view_mode">tree</field>
+        </record>
+    </data>
+</openerp>

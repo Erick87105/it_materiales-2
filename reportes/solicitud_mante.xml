@@ -1,0 +1,270 @@
+<openerp>
+	<data>
+        <template id="solicitud_reporte">
+
+            <style>
+
+                .encabezado {
+                    font-family: arial, sans-serif;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                .header-date {
+                    text-align: right;
+                    font-size: 14px;
+                    font-weight: bold;
+                    margin-right: 0px;
+                    margin-top: 0px;
+                    position: absolute;
+                    right: 0px;
+                    top: 0px;
+                }
+
+                .folio {
+                    margin-left: 0px;
+                    margin-top: 0px;
+                    position: absolute;
+                    left: 0px;
+                    top: 0px;
+                }
+
+                table.datos {
+                    margin-top: 90px;
+                    height:100px;/* Proporciona un espacio por debajo de la tabla*/
+                }
+
+                .datos td, .datos th {
+                    border: 2px solid black;
+                    padding: 8px; /* Espaciado interno */
+                    margin: 0; /* Elimina márgenes alrededor de la tabla */
+                    font-family: 'Roboto', sans-serif;
+                    text-align: center; /* Alineación centrada */
+                }
+
+
+                table.tipo {
+                    width: 100%; /* Hace que la tabla cubra todo el ancho */
+                }
+
+                .tipo td, .tipo th {
+                    border: 2px solid black;
+                    padding: 8px; /* Espaciado interno */
+                    font-family: 'Roboto', sans-serif;
+                    text-align: center; /* Alineación centrada */
+                }
+
+                table.areayfecha {
+                    margin-top: 60px;
+                    width: 100%; /* Hace que la tabla cubra todo el ancho */
+                }
+
+                .areayfecha td, .areayfecha th {
+                    border: 2px solid black;
+                    padding: 12px; /* Espaciado interno */
+                    font-family: 'Roboto', sans-serif;
+                    text-align: center; /* Alineación centrada */
+                }
+
+                table.nombreyfirma {
+                    width: 100%; /* Hace que la tabla cubra todo el ancho */
+                }
+
+                .nombreyfirma td, .nombreyfirma th {
+                    border: 2px solid black;
+                    padding: 8px; /* Espaciado interno */
+                    font-family: 'Roboto', sans-serif;
+                    text-align: center; /* Alineación centrada */
+                }
+
+                .nombreyfirma td{
+                    height: 110px; /* Espaciado interno */
+                    vertical-align: bottom; /* Hace que el contenido esté alineado al borde inferior */
+                }
+
+                table.servicio {
+                    width: 100%; /* Hace que la tabla cubra todo el ancho */
+                }
+
+                .servicio td, .servicio th {
+                    border: 2px solid black;
+                    padding: 8px; /* Espaciado interno */
+                    font-family: 'Roboto', sans-serif;
+                    text-align: center; /* Alineación centrada */
+                }
+
+                .servicio td {
+                    padding: 12px; /* Espaciado interno */
+                    text-align: left; /* Alineación izquierda*/
+                }
+
+                table.estado {
+                    margin-top: 40px;
+                    width: 100%; /* Hace que la tabla cubra todo el ancho */
+                }
+
+                .estado td, .estado th {
+                    border: 2px solid black;
+                    padding: 8px; /* Espaciado interno */
+                    font-family: 'Roboto', sans-serif;
+                    text-align: center; /* Alineación centrada */
+                }
+
+
+                div h3 {
+                    text-align: center;
+                    color: black;
+                    font-family: 'Lora', serif;
+                    font-weight: 100;
+                }
+
+
+            </style>
+
+            <t t-call="report.html_container">
+
+                <t t-foreach="docs" t-as="o">
+
+                    <div class = "header">
+
+                        <table class="encabezado" style="border-collapse: collapse; margin-top:20px;">
+                                    <tr>
+                                        <!-- Celda para la primera imagen a la izquierda -->
+                                        <td style="border: none; width: 50%; text-align: left; border-right: 1px solid black;">
+
+                                            <p style="height:90px; width:150px; margin:5px;">
+                                                <img src="/it_materiales/static/description/img/ITS_Apatzingan.png" alt="logo" width="50%" height="100%" />
+                                            </p>
+
+                                        </td>
+
+                                            <!-- Celda para la segunda imagen a la derecha -->
+                                        <td style="border: none; width: 50%; text-align: right;">
+
+                                            <p style="height:100px; width:300px; margin:5px;">
+                                                <img src="/it_materiales/static/description/img/logo.png" alt="otro_logo" width="50%" height="100%" />
+                                            </p>
+
+                                        </td>
+                                    </tr>
+                        </table>
+
+                        <div class="header-date">
+                            <span t-esc="datetime.datetime.today().strftime('%d/%m/%Y')"/>
+                        </div>
+
+                        <h3>Solicitud de Mantenimiento Correctivo</h3>
+
+                    </div>
+
+                    <div class="page">
+
+
+                        <!-- Inicio de la estructura de la tabla principal -->
+                        <table class="datos">
+                            <!-- Fila 1: FOLIO -->
+
+                            <tr class="folio">
+                                <td style="width: 30%; font-weight: bold;">FOLIO:</td>
+                                <td style="width: 70%;"><t t-esc="o.name"/></td>
+                            </tr>
+
+                        </table>
+
+                        <table class="tipo">
+
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%; font-weight: bold;">TIPO DE MANTENIMIENTO SOLICITADO:</th>
+                                </tr> 
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td style="width: 70%;"><t t-esc="o.tipo_mantenimiento.name"/></td>
+                                </tr>
+                            </tbody>   
+
+                        </table>
+
+                        <table class="areayfecha">
+
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%; font-weight: bold;">ÁREA SOLICITANTE:</th>
+                                    <th style="width: 30%; font-weight: bold;">FECHA DE SOLICITUD:</th>
+                                </tr> 
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td style="width: 70%;"><t t-esc="o.area_solicitante.name"/></td>
+                                    <td style="width: 70%;"><t t-esc="o.fecha_solicitud"/></td>
+                                </tr>
+                            </tbody>   
+
+                        </table>
+
+                        <table class="nombreyfirma">
+
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%; font-weight: bold;">NOMBRE Y FIRMA DEL SOLICITANTE:</th>
+                                </tr> 
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td style="width: 70%;"><t t-esc="o.nombre_solicitante.name"/></td>
+                                </tr>
+                            </tbody>   
+
+                        </table>
+
+                        <table class="servicio">
+
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%; font-weight: bold;">DESCRIPCIÓN DEL SERVICIO SOLICITADO O FALLA A REPARAR:</th>
+                                </tr> 
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td class="descrip" style="width: 70%;"><t t-esc="o.descripcion"/></td>
+                                </tr>
+                            </tbody>   
+
+                        </table> 
+
+                        <table class="estado">
+
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%; font-weight: bold;">ESTADO DEL SERVICIO:</th>
+                                </tr> 
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td class="descrip" style="width: 70%;"><t t-esc="o.state"/></td>
+                                </tr>
+                            </tbody>   
+
+                        </table>                                                 
+
+                    </div>
+
+					<div class="footer">
+
+                        <h5 style="text-align: center;">
+                            <strong><span> Página </span><span class="page"/> de <span class="topage"/></strong>
+                        </h5>
+
+					</div>
+                    
+                </t>
+            </t>
+        </template>
+    </data>    
+</openerp>

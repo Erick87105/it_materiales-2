@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- Definición de la acción que se usará en el menú -->
+        <record id="materiales_parametros_action" model="ir.actions.act_window">
+            <field name="name">Parámetros del Sistema</field>
+            <field name="res_model">materiales.parametros</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Vista de formulario para gestionar parámetros del sistema -->
+        <record model="ir.ui.view" id="materiales_parametros_form">
+            <field name="name">materiales.parametros.form</field>
+            <field name="model">materiales.parametros</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Parámetros del Sistema">
+                    <sheet>
+                        <group>
+                            <field name="key"/>
+                            <field name="value"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de lista para visualizar parámetros -->
+        <record model="ir.ui.view" id="materiales_parametros_tree">
+            <field name="name">materiales.parametros.tree</field>
+            <field name="model">materiales.parametros</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Parámetros">
+                    <field name="key"/>
+                    <field name="value"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</openerp>
+

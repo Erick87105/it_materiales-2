@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Vista de formulario para la evaluación de criterios -->
+        <record model="ir.ui.view" id="materiales_criterios_form_view">
+            <field name="name">materiales.criterios.form</field>
+            <field name="model">materiales.criterios</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Criterios de Evaluación">
+                    <sheet>
+                        <table>
+                            <group>
+                                <field name="criterio_1" widget="radio"/>
+                                <field name="criterio_2" widget="radio"/>
+                                <field name="criterio_3" widget="radio"/>
+                                <field name="criterio_4" widget="radio"/>
+                                <field name="criterio_5" widget="radio"/>
+                                <field name="criterio_6" widget="radio"/>
+                                <field name="criterio_7" widget="radio"/>
+                                <field name="criterio_8" widget="radio"/>
+                                <field name="criterio_9" widget="radio"/>
+                                <field name="criterio_10" widget="radio"/>
+                            </group>
+                        </table>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Acción para abrir la vista de criterios -->
+        <record id="materiales_criterios_action" model="ir.actions.act_window">
+            <field name="name">Evaluación de criterios</field>
+            <field name="res_model">materiales.criterios</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="materiales_criterios_form_view"/>
+        </record>
+    </data>
+</openerp>

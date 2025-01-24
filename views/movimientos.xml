@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+
+        <!-- Vista tipo tree para movimientos.ubicaciones -->
+        <record id="view_movimientos_ubicaciones_tree" model="ir.ui.view">
+            <field name="name">movimientos.ubicaciones.tree</field>
+            <field name="model">movimientos.ubicaciones</field>
+            <field name="arch" type="xml">
+                <tree string="Movimientos entre ubicaciones">
+                    <field name="name"/>
+                    <field name="fecha_cambio"/>
+                    <field name="departamento_id"/>
+                    <field name="ubicacion_id"/>
+                    <field name="tipo_movimiento"/>
+                    <field name="observaciones"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_movimientos_ubicaciones_form" model="ir.ui.view">
+            <field name="name">movimientos.ubicaciones.form</field>
+            <field name="model">movimientos.ubicaciones</field>
+            <field name="arch" type="xml">
+                <form string="Movimientos entre ubicaciones">
+                    <header>
+                        <field name="status" widget="statusbar" statusbar_visible="creado,aplicado,cancelado"/>
+                        <button name="action_aplicar" type="object" string="Aplicar Entrega" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                        <button name="action_cancelar" type="object" string="Cancelar Entrega" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                    </header>
+                    <sheet>
+                        <h1 style="font-size:20px;color:#2E86C1;font-weight:bold;text-align:center">Movimientos entre Ubicaciones</h1>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="departamento_id"/>
+                                <field name="ubicacion_id"/>
+                                <field name="tipo_movimiento"/>
+                            </group>
+                            <group>
+                                <field name="fecha_cambio" readonly="1"/>
+                                <field name="observaciones"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Detalles de movimiento">
+                                <field name="detalle_ids">
+                                    <tree editable="bottom">
+                                        <field name="producto_id"/>
+                                        <field name="departamento_origen_id"/>
+                                        <field name="edificio_origen"/>
+                                        <field name="area_origen"/>
+                                        <field name="departamento_destino_id"/>
+                                        <field name="edificio_destino"/>
+                                        <field name="area_destino"/>
+                                        <field name="nombre"/>
+                                        <field name="numero_serie"/>
+                                        <field name="descripcion"/>
+                                    </tree>
+                                </field>
+                                
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        
+        
+
+        <!-- Acciones -->
+        <record id="action_movimientos_ubicaciones" model="ir.actions.act_window">
+            <field name="name">Movimientos entre ubicaciones</field>
+            <field name="res_model">movimientos.ubicaciones</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</openerp>
