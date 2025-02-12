@@ -13,7 +13,6 @@
                     <field name="marca" />
                     <field name="modelo" />
                     <field name="tipo_producto" />
-                    <field name="serie" />
                     <field name="categoria_id"/>
                     <field name="subcategoria_id"/>
                     <field name="cantidad"/>
@@ -49,7 +48,7 @@
                                 <group>
                                     <field name="clave" />
                                     <field name="categoria_id" />
-                                    <field name="subcategoria_id" domain="[('categoria_id', '=', categoria_id)]"/>
+                                    <field name="subcategoria_id"/>
                                     <field name="cantidad" />
                                     <field name="valor_actual"/>
                                     <field name="valor_depreciado"/>
@@ -75,7 +74,6 @@
                     <field name="name" />
                     <field name="marca" />
                     <field name="modelo" />
-                    <field name="serie" />
                     <field name="categoria_id"/>
                     <field name="subcategoria_id"/>
                 </search>

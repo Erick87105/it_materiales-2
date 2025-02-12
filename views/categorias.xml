@@ -2,19 +2,13 @@
 <openerp>
     <data>
 
-        <!-- Acción de la ventana para Categorías de Depreciación -->
-        <record model="ir.actions.act_window" id="action_depreciacion_categoria2">
-            <field name="name">Categorias</field>
-            <field name="res_model">depreciacion.categoria</field>
-            <field name="view_mode">tree</field>
-        </record>
-
-        <!-- Vista de árbol para Categoría de Depreciación, editable -->
-        <record model="ir.ui.view" id="view_depreciacion_categoria_tree2">
-            <field name="name">depreciacion.categoria.tree</field>
+                <!-- Vista tipo tree -->
+        <record model="ir.ui.view" id="categorias_tree">
+            <field name="name">categorias.tree</field>
             <field name="model">depreciacion.categoria</field>
+            <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="Categoria de Depreciacion" editable="bottom">
+                <tree string="Categorias" >
                     <field name="name"/>
                     <field name="descripcion"/>
                     <field name="subcategoria_ids"/>
@@ -22,45 +16,58 @@
             </field>
         </record>
 
-        <!-- Vista de árbol para Subcategorías dentro de Categoría, editable -->
-        <record model="ir.ui.view" id="view_depreciacion_subcategoria_tree2">
-            <field name="name">depreciacion.subcategoria.tree</field>
-            <field name="model">depreciacion.subcategoria</field>
+                <!-- Vista tipo form-->
+        <record id="view_depreciacion_categoria_form" model="ir.ui.view">
+            <field name="name">depreciacion.categoria.form</field>
+            <field name="model">depreciacion.categoria</field>
+            <field name="type">form</field>
             <field name="arch" type="xml">
-                <tree string="Subcategorias" editable="bottom">
-                    <field name="name"/>
-                    <field name="anos_vida_util"/>
-                    <field name="depreciacion_anual"/>
-                    <field name="categoria_id"/>
-                </tree>
+                <form string="Categoría">
+
+                    <sheet>
+                        <h1 style="font-size:20px;color:#2E86C1;font-weight:bold;text-align:center">Categorías para Productos</h1>
+                        <group>
+                            <group>
+                                <field name="name" string="Nombre de la Categoría"/>
+                                <field name="descripcion" string="Descripción"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Subcategorías">
+                                <field name="subcategoria_ids">
+                                    <tree editable="bottom">
+                                        <field name="name" string="Nombre de la Subcategoría"/>
+                                        <field name="descripcion" string="Descripción"/>
+                                        <field name="anos_vida_util" string="Años de Vida Útil"/>
+                                        <field name="depreciacion_anual" string="% Depreciación Anual"/>
+                                        <!-- <field name="categoria_id" string="Categoría"/> -->
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
             </field>
         </record>
 
-        <!-- Vista de búsqueda para Categoría de Depreciación -->
+        <!-- Vista de búsqueda -->
         <record model="ir.ui.view" id="view_depreciacion_categoria_search2">
             <field name="name">depreciacion.categoria.search</field>
             <field name="model">depreciacion.categoria</field>
             <field name="arch" type="xml">
                 <search string="Buscar Categoria de Depreciacion">
                     <field name="name"/>
-                    <field name="descripcion"/>
                 </search>
             </field>
         </record>
 
-        <!-- Vista de búsqueda para Subcategoría de Depreciación -->
-        <record model="ir.ui.view" id="view_depreciacion_subcategoria_search2">
-            <field name="name">depreciacion.subcategoria.search</field>
-            <field name="model">depreciacion.subcategoria</field>
-            <field name="arch" type="xml">
-                <search string="Buscar Subcategoria de Depreciacion">
-                    <field name="name"/>
-                    <field name="descripcion"/>
-                    <field name="anos_vida_util"/>
-                    <field name="depreciacion_anual"/>
-                    <field name="categoria_id"/>
-                </search>
-            </field>
+
+        <!-- Acción -->
+        <record id="action_depreciacion_categoria2" model="ir.actions.act_window">
+            <field name="name">Categorias</field>
+            <field name="res_model">depreciacion.categoria</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="categorias_tree"/>
         </record>
 
     </data>

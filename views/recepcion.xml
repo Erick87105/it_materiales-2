@@ -30,19 +30,21 @@
                             <group>
                                 <field name="name" string="Folio" readonly="1"/>
                                 <field name="fecha" string="Fecha de Recepción" readonly="1"/>
-                                <field name="ubicacion_recepcion" string="Ubicación"/>
-                                <field name="numero_factura"/>
+                                <field name="ubicacion_recepcion" attrs="{'readonly': [('status', 'in', ['aplicado', 'cancelado'])]}"/>
+                                <field name="numero_factura" attrs="{'readonly': [('status', 'in', ['aplicado', 'cancelado'])]}"/>
                             </group>
                             <group>
-                                <field name="compra_ids" widget="many2many_tags" string="Compras Asociadas"/>
-                                <field name="observaciones" string="Observaciones"/>
+                                <field name="compra_ids" widget="many2many_tags" string="Compras Asociadas" attrs="{'readonly': [('status', 'in', ['aplicado', 'cancelado'])]}"/>
+                                <field name="observaciones" string="Observaciones" attrs="{'readonly': [('status', 'in', ['aplicado', 'cancelado'])]}"/>
                                 <field name="total_costo_real" readonly="1" string="Total Costo Real"/>
 
                             </group>
 
                         </group>
-                        <group string="Detalles de Recepción">
-                                <field name="detalle_ids3" nolabel="1">
+
+                        <notebook>
+                            <page string="Detalles de Recepción">
+                                <field name="detalle_ids3" attrs="{'readonly': [('status', 'in', ['aplicado', 'cancelado'])]}">
                                     <tree editable="bottom">
                                         <field name="compra_id" string="Compra"/>
                                         <field name="recepcion_id" string="Recepcion"/>
@@ -55,22 +57,14 @@
                                         <field name="descripcion" string="Descripción"/>
                                     </tree>
                                 </field>
-                        </group>
-
-                        <div class="oe_chatter">
-                            <field name="message_ids" widget="mail_thread"/>
-                        </div>
-                        <footer>
-                            <button string="Cerrar" class="oe_link" special="cancel"/>
-                            <button name="action_agregar_impuesto" type="object" string="Agregar IVA" class="btn-primary"/>
-
-                        </footer>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <!-- Vista de lista para las recepciones -->
+        <!-- Vista tree de recepciones -->
         <record model="ir.ui.view" id="materiales_recepcion_tree">
             <field name="name">materiales.recepcion.tree</field>
             <field name="model">materiales.recepcion</field>
@@ -86,28 +80,5 @@
             </field>
         </record>
 
-        <!-- Vista de Detalles de Recepción -->
-        <record model="ir.ui.view" id="view_detallerec_form">
-            <field name="name">materiales.detalle.recepcion.form</field>
-            <field name="model">materiales.detalle.recepcion</field>
-            <field name="arch" type="xml">
-                <form string="Detalles de Recepción">
-                    <sheet>
-                        <group>
-                                <field name="compra_id" string="Compra Asociada"/>
-                                <field name="recepcion_id" string="Recepcion"/>
-                                <field name="clave" string="Clave"/>
-                                <field name="producto_id" string="Producto"/>
-                                <field name="cantidad" string="Cantidad"/>
-                                <field name="costo_estimado" string="Costo Estimado"/>
-                                <field name="costo_real" string="Costo Real"/>
-                                <field name="proveedor_id" string="Proveedor"/>
-                                <field name="descripcion" string="Descripción"/> 
-
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
     </data>
 </openerp>

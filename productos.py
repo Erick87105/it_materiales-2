@@ -76,8 +76,8 @@ class Productos(models.Model):
                     producto.valor_depreciado = producto.valor_actual - depreciacion_acumulada
                 else:
                     producto.valor_depreciado = producto.valor_actual
-            else:
-                producto.valor_depreciado = producto.valor_actual
+            # else:
+            #     producto.valor_depreciado = producto.valor_actual
 
     @api.onchange('subcategoria_id')
     def _onchange_subcategoria_id(self):

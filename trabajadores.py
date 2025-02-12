@@ -15,7 +15,7 @@ class TrabajadoresMateriales(models.Model):
     name = fields.Char(string='Nombre Completo', required=True)
     employee_id = fields.Char(string='ID del Empleado', required=True)
     departamento_id = fields.Many2one('itsa.base.deptos', string='Departamento', required=True)
-    puesto =  fields.Many2one('trabajadores.materiales.puesto', string='Puesto')
+    puesto =  fields.Many2one('trabajadores.materiales.puesto', string='Puesto', required=True)
     date_hired = fields.Date(string='Fecha de Contratación')
     active = fields.Boolean(string='Activo', default=True)
 

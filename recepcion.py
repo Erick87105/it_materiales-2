@@ -2,7 +2,9 @@
 from openerp import models, fields, api
 from openerp.exceptions import ValidationError
 from datetime import datetime
-# libreria que permite saber la similitud de una cadena de textp
+from openerp.exceptions import Warning
+
+# libreria que permite saber la similitud de una cadena de texto
 from difflib import SequenceMatcher
 import difflib
 import logging
@@ -16,16 +18,18 @@ class Recepcion(models.Model):
     _name = 'materiales.recepcion'
     _inherit = ['mail.thread']
 
-    name = fields.Char(string='Folio', readonly=True, default=lambda self: self.env['ir.sequence'].next_by_code('Foliorecepciones'))
+    name = fields.Char(string='Folio', readonly=True)
     fecha = fields.Datetime(string='Fecha y hora', default=fields.Datetime.now, readonly=True)
     status = fields.Selection([('creado', 'Creado'), ('aplicado', 'Aplicado'), ('cancelado', 'Cancelado')], string='Estado', default='creado')
     observaciones = fields.Text(string='Observaciones')
     ubicacion_recepcion = fields.Selection([('bodega', 'Bodega Materiales'), ('otros', 'Almacen')], string='Ubicación de Recepción', required=True, default='bodega')
     detalle_ids = fields.One2many('materiales.detallerec', 'recepcion_id', string='Detalles de Recepción')
+    numero_factura = fields.Char(string='Número de Factura', required=True)
     compra_ids = fields.Many2many('materiales.comprados', string='Compras', domain="[('status', '=', 'pedido')]")
-    # attachment_ids = fields.Many2many('ir.attachment', string='Adjuntos')
-    numero_factura = fields.Char(string='Número de Factura')
+    
     detalle_ids3 = fields.One2many('materiales.detalle.recepcion', 'recepcion_id', string='Detalles de Recepción')
+
+    # attachment_ids = fields.Many2many('ir.attachment', string='Adjuntos')
 
     @api.multi
     def action_comparar_catalogo(self):
@@ -84,6 +88,16 @@ class Recepcion(models.Model):
     @api.multi
     def action_aplicar(self):
         
+        vals={}
+        vals['name'] = self.env['ir.sequence'].next_by_code('Foliorecepciones')
+        self.write({'status': 'aplicado'})
+        
+        if len(self.detalle_ids3) == 0:
+            raise Warning('No hay Compras Asociadas, por favor seleccione al menos una')
+        if not vals['name']:
+            raise Warning('No hay folio')
+        self.write(vals)
+
         """ Método para aplicar la recepción, cambiando su estado y actualizando las compras relacionadas. """
         
         # Validar costos antes de aplicar
@@ -92,7 +106,7 @@ class Recepcion(models.Model):
         # Cambiar estado de la recepción
         self.write({'status': 'aplicado'})
         
-        # Actualiza el estado de la compra relacionada
+        # Actualiza el estado de la compra asociada
         if self.compra_ids:
             self.compra_ids.write({'status': 'recibido'})
         
@@ -283,19 +297,24 @@ class DetallesRecepcion(models.Model):
         """Autocompleta el campo producto_id al escribir una descripción."""
         if self.descripcion:  # Verifica si hay una descripción ingresada
 
+
             productos = self.env['itsa.materiales.productos'].search([])  # Busca todos los productos en la base de datos
+            
+            # Obtiene el valor del parámetro 'similitud_descripcion'
+            similitud_minima = float(self.env['materiales.parametros'].get_param('similitud_descripcion'))
 
             for producto in productos:
 
-                # Compara la descripción con el nombre del producto usando similaridad
+                # Compara la descripción con el nombre del producto usando la función ratio() de SequenceMatcher
                 similitud = SequenceMatcher(None, producto.name, self.descripcion).ratio()
 
-                if similitud >= 0.6:  # Si hay un 60% o más de similitud
+                if similitud >= similitud_minima:  # Si hay un 60% o más de similitud
 
                     self.producto_id = producto.id  # Asigna automáticamente el producto
                     return  # Detiene el proceso después de encontrar el primer producto similar
 
 class Detallerec(models.Model):
+    
     _name = 'materiales.detallerec'
 
     recepcion_id = fields.Many2one('materiales.recepcion', string='Recepción')

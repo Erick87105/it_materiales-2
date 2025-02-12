@@ -47,6 +47,9 @@ class SolicitudMantenimiento(models.Model):
 
 class TipoMantenimiento(models.Model):
     _name = 'tipo.mantenimiento'
-    _description = 'Tipo de Mantenimiento'
 
     name = fields.Char(string='Nombre', required=True)
+    
+    _sql_constraints = [
+        ('tipo_mantenimiento_unique_name', 'unique(name)', 'Este tipo de mantenimiento ya existe')]
+    

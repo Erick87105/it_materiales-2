@@ -50,9 +50,9 @@ class Compras(models.Model):
         self.write({'status': 'pedido'})
         
         if len(self.compra_detalle_ids) == 0:
-            raise Warning('No hay productos en la compra')
+            raise Warning('No hay requisiciones en la compra, por favor seleccione al menos una')
         if not vals['name']:
-            raise Warning('No hay folio compras defenido')
+            raise Warning('No hay folio')
         self.write(vals)
 
     @api.multi

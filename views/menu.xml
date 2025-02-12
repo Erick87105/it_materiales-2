@@ -13,7 +13,7 @@
         <menuitem name="Proveedores" action="materiales_proveedor_action" id="menu_materiales_proveedor" sequence="30" parent="menu_materiales_configuracion"/>
         <menuitem name="Productos" action="materiales_productos_action" id="menu_materiales_productos" sequence="40" parent="menu_materiales_configuracion"/>
         <menuitem id="menu_materiales_trabajadores" name="Trabajadores" parent="menu_materiales_configuracion" sequence="41" action="action_trabajadores_materiales"/>
-        <menuitem name="Categorías de Depreciación" action="action_depreciacion_categoria2" id="menu_depreciacion_categoria" parent="menu_materiales_configuracion" sequence="42"/>
+        <menuitem name="Categorías" action="action_depreciacion_categoria2" id="menu_depreciacion_categoria" parent="menu_materiales_configuracion" sequence="42"/>
         
         <!-- Submenú: Operaciones -->
         <menuitem name="Operaciones" id="menu_materiales_operaciones" parent="menu_materiales" sequence="20"/>

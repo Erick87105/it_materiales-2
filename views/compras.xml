@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
         <!-- Vista tipo tree del modelo materiales.compras -->
@@ -7,18 +7,19 @@
             <field name="model">materiales.comprados</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="Compras" >
-                    <field name="name"/>
-                    <field name="fecha"/>
-                    <field name="proveedor_id"/>
-                    <field name="status" widget="statusbar"/>
-                    <field name="total"/>
-                    <field name="totalr"/>
+                <tree string="Compras">
+                    <field name="name" string="Folio"/>
+                    <field name="fecha" string="Fecha y hora"/>
+                    <field name="proveedor_id" string="Proveedor"/>
+                    <field name="requisicion_ids" string="Requisiciones"/>
+                    <field name="status" string="Estado"/>
+                    <field name="total" string="Total estimado"/>
+                    <field name="totalr" string="Total real"/>
                 </tree>
             </field>
         </record>
 
-
+        <!-- Vista tipo form -->
         <record model="ir.ui.view" id="materiales_compras_form">
             <field name="name">materiales.compras.form</field>
             <field name="model">materiales.comprados</field>
@@ -37,18 +38,19 @@
                     <sheet>
                         <h1 style="font-size:20px;color:#2E86C1;font-weight:bold;text-align:center">Compras de Productos o Servicios</h1>
 
-                        <group >
+                        <group>
                             <group>
                                 <field name="name"/>
-                                <field name="proveedor_id" attrs="{'invisible': [('status', '!=', 'creado')]}"/>
+                                <field name="proveedor_id" attrs="{'readonly': [('status', 'in', ['pedido', 'recibido'])]}"/>
                                 <field name="total" readonly="1"/>
                             </group>
                             <group>
                                 <field name="fecha"/>
-                                <field name="requisicion_ids" widget="many2many_tags" attrs="{'invisible': [('status', '!=', 'creado')]}"/> 
+                                <field name="requisicion_ids" widget="many2many_tags" attrs="{'readonly': [('status', 'in', ['pedido', 'recibido'])]}"/> 
                                 <field name="totalr" readonly="1"/>
                             </group>
                         </group>
+
                         <notebook>
                             <page string="Detalles de Compra">
                                 <field name="compra_detalle_ids" attrs="{'readonly': [('status', 'in', ['pedido', 'recibido'])]}">
@@ -61,7 +63,6 @@
                                     </tree>
                                 </field>
                             </page>
-
                         </notebook>
                     </sheet>
                 </form>
