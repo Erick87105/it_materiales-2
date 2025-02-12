@@ -59,6 +59,15 @@
                                 </field>
                             </page>
                         </notebook>
+
+                        <div class="oe_chatter">
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                        <footer>
+                            <button string="Cerrar" class="oe_link" special="cancel"/>
+                            <button name="action_agregar_impuesto" type="object" string="Agregar IVA" class="btn-primary"/>
+                        </footer>
+
                     </sheet>
                 </form>
             </field>
