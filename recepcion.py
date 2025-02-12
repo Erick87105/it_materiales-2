@@ -88,6 +88,8 @@ class Recepcion(models.Model):
     @api.multi
     def action_aplicar(self):
         
+        """ Asigna el folio de la recepcion, solo si el estado se encuentra en aplicado """
+
         vals={}
         vals['name'] = self.env['ir.sequence'].next_by_code('Foliorecepciones')
         self.write({'status': 'aplicado'})
@@ -110,7 +112,8 @@ class Recepcion(models.Model):
         if self.compra_ids:
             self.compra_ids.write({'status': 'recibido'})
         
-        # Actualizamos el stock de los productos
+        """ Actualizar el stock de los productos, en base a los nuevos productos de la recepción. """
+
         for detalle in self.detalle_ids3:  # Iteramos sobre los detalles de la recepción
             # Buscamos el producto correspondiente
             producto = self.env['itsa.materiales.productos'].search([('clave', '=', detalle.clave)], limit=1)
