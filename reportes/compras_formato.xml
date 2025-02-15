@@ -173,7 +173,7 @@ t-as="requisicion": Cada elemento de la lista se guarda en la variable requisici
                                 <tr>
                                     <th style="width:70%; text-align: left;">Descripcion</th>
                                     <th style="width:15%">Cantidad</th>
-                                    <!-- <th style="width:15%">Costo Estimado</th> -->
+                                    <th style="width:15%">Costo Estimado</th>
                                     <th style="width:15%">Costo Real</th>
                                 </tr>
                             </thead>

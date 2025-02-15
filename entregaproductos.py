@@ -22,14 +22,15 @@ class Entregaproductos(models.Model):
         ('cancelado', 'Cancelado'),
     ]
 
-    name = fields.Char(string='Folio', readonly=True, default=lambda self: self.env['ir.sequence'].next_by_code('folioEntrega'))
-    req_ids = fields.Many2one('itsa.planeacion.requisiciones', string='Requisiciones')  # Campo Many2many para requisiciones
-    responsable = fields.Char(string='Responsable de resguardo', compute='_compute_responsable', store=True)    
+    name = fields.Char(string='Folio', readonly=True)
+    req_ids = fields.Many2one('itsa.planeacion.requisiciones', string='Requisiciones') 
+    responsable = fields.Char(string='Responsable de resguardo', compute='_compute_responsable')    
     fecha = fields.Datetime(string='Fecha y hora', default=fields.Datetime.now, readonly=True)
     status = fields.Selection(STATUS_SELECTION, string='Estado', default='creado')  # Estado de la entrega
     departamento_id = fields.Many2one('itsa.base.deptos', string='Departamento de asignacion')
     ubicacion = fields.Char(string='Ubicación origen', default='RECURSOS DE MATERIALES Y SERVICIOS', readonly=True)
-    detalle_ids = fields.One2many('materiales.detalleentrega', 'entregaproductos_id', string='Detalle recepción')
+   
+    detalle_ids = fields.One2many('materiales.detalleentrega', 'entregaproductos_id', string='Detalles de Entrega')
     
 
     # @api.model
@@ -58,72 +59,56 @@ class Entregaproductos(models.Model):
         # Cambiar el estado de la entrega a 'cancelado'
         self.write({'status': 'cancelado'})
 
-    @api.onchange('departamento_id')
-    def _onchange_departamento_id(self):
-        if self.departamento_id:
-            self.responsable = self.departamento_id.jefe.name
-        else:
-            self.responsable = ''
-            
+
     @api.depends('departamento_id')
     def _compute_responsable(self):
         for record in self:
             if record.departamento_id:
                 jefe_name = record.departamento_id.jefe.name
-                # Actualizamos el valor de responsable sin disparar el write
                 record.update({'responsable': jefe_name})
             else:
                 record.update({'responsable': ''})
 
-    @api.multi
-    def write(self, vals):
-        # Evitar que se compute el responsable al escribir si ya está presente en los valores
-        if 'responsable' not in vals:
-            self._compute_responsable()
-        return super(Entregaproductos, self).write(vals)
-
-    
-    @api.model
-    def create(self, vals):
-        record = super(Entregaproductos, self).create(vals)
-        record._compute_responsable()
-        return record
-
-    @api.model
-    def create(self, vals):
-        vals['name'] = self.env['ir.sequence'].next_by_code('Folioentregaproductos')
-        return super(Entregaproductos, self).create(vals)
-
-    @api.multi
-    def action_aplicar(self):
-        self.write({'status': 'aplicado'})
-
     @api.model
     def create(self, vals):
         # Crear el registro de Entregaproductos
-        record = super(Entregaproductos, self).create(vals)
+        vals['name'] = self.env['ir.sequence'].next_by_code('Folioentregaproductos')
+        entrega = super(Entregaproductos, self).create(vals)
 
         # Buscamos las compras con estado 'recibido' y obtenemos sus requisiciones
-        compras_recibidas = self.env['materiales.comprados'].search([('status', '=', 'recibido')])
+        reqs = self.env['itsa.planeacion.requisiciones'].search([('state', 'in', ['surp', 'surc'])])
+        detalles = []
+        for req in reqs:  # Iterar sobre cada requisición
+            compras = self.env['materiales.comprasdetalle'].search([
+                ('req_id', '=', req.id),
+                ('req_id.compra_id.status', '=', 'recibido')
+            ])
+            for cmpd in compras:
+                if cmpd.producto_id and cmpd.cantidad:  # Validar que los campos existan
+                    detalles.append({
+                        'entregaproductos_id': entrega.id,
+                        'producto_id': cmpd.producto_id.id,
+                        'cantidad': cmpd.cantidad
+                    })
 
         # Asignamos las requisiciones de las compras con estado 'recibido' al campo req_ids
-        requisiciones = compras_recibidas.mapped('requisicion_ids')
-        record.write({'req_ids': requisiciones})
+        if detalles:
+            entrega.write({'detalle_ids': [(0, 0, d) for d in detalles]})
 
-        return record
+        return entrega
     
 class Detalleentrega(models.Model):
     _name = 'materiales.detalleentrega'
 
     entregaproductos_id = fields.Many2one('materiales.entregaproductos', string='Entrega')
     producto_id = fields.Many2one('materiales.productos', string='Producto')
-    #cantidad = fields.Integer(string='Cantidad')
-    ubicacion_id = fields.Many2one("materiales.ubicaciones",string='Clave ubicacion destino')
+    cantidad = fields.Integer(string='Cantidad')
+    destino_id = fields.Many2one('itsa.base.deptos', string='Destino', related='entregaproductos_id.departamento_id', readonly=True)
+    ubicacion_id = fields.Many2one("materiales.ubicaciones", string='Clave ubicacion destino')
     
-    ubicacion_destino = fields.Char(string='Ubicación destino')
     edificio = fields.Char(string='Edificio')
     area = fields.Char(string='Área')
-    cantidad = fields.Selection(selection='_get_rango_cantidad', string='Cantidad')
+    # cantidad = fields.Selection(selection='_get_rango_cantidad', string='Cantidad')
     
     @api.onchange('ubicacion_id')
     def _onchange_ubicacion_id(self):
@@ -136,8 +121,8 @@ class Detalleentrega(models.Model):
             self.edificio = ''
             self.area = ''
     
-    @api.model
-    def _get_rango_cantidad(self):
-        # Este método genera una lista de tuplas con números del 1 al 20
-        return [(str(num), str(num)) for num in range(1, 500)]
+    # @api.model
+    # def _get_rango_cantidad(self):
+    #     # Este método genera una lista de tuplas con números del 1 al 20
+    #     return [(str(num), str(num)) for num in range(1, 500)]
     

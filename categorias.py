@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields
+from openerp import models, fields, api
 
 class Categoria(models.Model):
     _name = 'depreciacion.categoria.nueva'
+    _rec_name = 'name' # Permite mostrar sus campos como tipo char, para mostrarse desde otro modelo.
 
     name = fields.Char(string='Categoria Nueva:', required=True)
-    
-  # Restricción para evitar duplicados
+
+    # Restricción para evitar duplicados
     _sql_constraints = [
         ('depreciacion_categoria_nueva_unique_name', 'unique(name)', 'Esta categoría ya existe')]
     
@@ -14,7 +15,6 @@ class DepreciacionCategoria(models.Model):
     _name = 'depreciacion.categoria'
 
     name = fields.Many2one('depreciacion.categoria.nueva', string='Categoria')
-    
     descripcion = fields.Text(string='Descripcion de la Categoria')
     subcategoria_ids = fields.One2many('depreciacion.subcategoria', 'categoria_id', ondelete='cascade', string='Subcategorias')
 

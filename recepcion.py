@@ -6,6 +6,7 @@ from openerp.exceptions import Warning
 
 # libreria que permite saber la similitud de una cadena de texto
 from difflib import SequenceMatcher
+
 import difflib
 import logging
 

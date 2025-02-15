@@ -50,15 +50,12 @@
                             </group>
                         </group>
                         <notebook>
-                            <page string="Detalles de entrega">
+                            <page string="Detalles de Entrega">
                                 <field name="detalle_ids">
                                     <tree editable="bottom">
                                         <field name="producto_id"/>
                                         <field name="cantidad"/>
-                                        <field name='ubicacion_id'/>
-                                        <field name="ubicacion_destino"/>
-                                        <field name="edificio"/>
-                                        <field name="area"/>
+                                        <field name="destino_id"/>
                                     </tree>
                                 </field>
                             </page>
