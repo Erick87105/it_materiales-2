@@ -30,6 +30,32 @@ class Listaprecios(models.Model):
             self.line_ids = []
 
     @api.multi
+    def cargar_productos(self):
+
+        for record in self:
+            
+            # Obtener todos los productos del proveedor
+            productos = self.env['itsa.materiales.productos'].search([('proveedor_id', '=', record.proveedor_id.id)])
+            
+            # Obtener las claves de los productos ya existentes en la lista de precios
+            claves_existentes = record.line_ids.mapped('clave')
+            
+            # Filtrar productos que no están en la lista de precios
+            productos_nuevos = productos.filtered(lambda p: p.clave not in claves_existentes)
+            
+            # Crear líneas para los productos nuevos
+            for producto in productos_nuevos:
+                self.env['materiales.listaprecios.line'].create({
+                    'listaprecios_id': record.id,
+                    'clave': producto.clave,
+                    'nombre': producto.name,
+                    'categoria': producto.categoria_id.name.name if producto.categoria_id.name else '',
+                    'subcategoria': producto.subcategoria_id.name if producto.subcategoria_id else '',
+                    'precio_actual': producto.valor_actual,
+                    'nuevo_precio': 0.0,
+                })
+
+    @api.multi
     def actualizar_precio(self):
         """Actualizar precios de productos y guardar historial de cambios."""
         for line in self.line_ids:

@@ -23,7 +23,9 @@
             <field name="arch" type="xml">
                 <form string="Lista de Precios">
                     <header>
+                        <button name="cargar_productos" type="object" string="Cargar Productos" class="oe_highlight"/>
                         <button name="actualizar_precio" type="object" string="Actualizar Precio" class="oe_highlight"/>
+
                     </header>
                     <sheet>
                         <h1 style="font-size:20px;color:#2E86C1;font-weight:bold;text-align:center">Lista de Precios</h1>
