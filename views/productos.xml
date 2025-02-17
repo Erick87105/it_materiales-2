@@ -17,9 +17,7 @@
                     <field name="subcategoria_id"/>
                     <field name="cantidad"/>
                     <field name="valor_actual"/>
-                    <field name="valor_depreciado"/>
-                    <field name="anos_vida_util" readonly="1"/>
-                    <field name="depreciacion_anual" readonly="1"/>
+                    <field name="proveedor_id"/>
                 </tree>
             </field>
         </record>

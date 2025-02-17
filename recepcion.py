@@ -143,7 +143,7 @@ class Recepcion(models.Model):
     @api.multi
     def action_cargar_detalles(self):
 
-            # Obtenemos los IDs de las requisiciones actualmente seleccionadas
+            # Obtenemos los IDs de las compras actualmente seleccionadas
             compras_seleccionadas_ids = self.compra_ids.ids
 
 

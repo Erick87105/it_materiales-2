@@ -8,17 +8,44 @@ _logger = logging.getLogger(__name__)
 class Listaprecios(models.Model):
     _name = 'materiales.listaprecios'
 
-    fecha = fields.Date(string='Fecha', default=fields.Date.context_today, readonly=True)
-    proveedor_id = fields.Many2one('materiales.proveedor', string='Proveedor', required=True)
+
+    # Definir la variable STATUS_SELECTION antes de usarla
+    STATUS_SELECTION = [
+        ('creada', 'Creada'),
+        ('aplicada', 'Aplicada'),
+    ]
+
+    fecha = fields.Date(string='Fecha de Creacion:', default=fields.Date.context_today, readonly=True)
+    proveedor_id = fields.Many2one('materiales.proveedor', string='Proveedor:', domain=lambda self: self._get_proveedor_domain(), required=True)
     aplicado = fields.Boolean(string='Aplicado', default=True)
+    status = fields.Selection(STATUS_SELECTION, string='Estado', default='creada')
+    
+    
     line_ids = fields.One2many('materiales.listaprecios.line', 'listaprecios_id', string='Detalles de Lista de Precios')
     precio_historial_ids = fields.One2many('materiales.precio.historial', 'listaprecios_id', string='Historial de Precios')
 
+
+    def _get_proveedor_domain(self):
+
+        """Obtener el dominio para restringir la selección de proveedores."""
+
+        # Buscar proveedores que ya tienen una lista de precios con estado "aplicada"
+        listas_aplicadas = self.search([('status', '=', 'aplicada')])
+
+        proveedores_aplicados = listas_aplicadas.mapped('proveedor_id.id')
+        
+        # Excluir proveedores que ya tienen una lista de precios aplicada
+        return [('id', 'not in', proveedores_aplicados)]
+
     @api.onchange('proveedor_id')
     def _onchange_proveedor_id(self):
-        """Cargar productos del proveedor seleccionado en 'line_ids'."""
+
+        """Cargar productos del proveedor seleccionado."""
+
         if self.proveedor_id:
+
             productos = self.env['itsa.materiales.productos'].search([('proveedor_id', '=', self.proveedor_id.id)])
+
             self.line_ids = [(0, 0, {
                 'clave': producto.clave,
                 'nombre': producto.name,
@@ -26,7 +53,9 @@ class Listaprecios(models.Model):
                 'categoria': producto.categoria_id.name.name,# El primer .name obtiene el objeto relacionado (la categoría en sí), el segundo .name obtiene el nombre de esa categoría.
                 'subcategoria': producto.subcategoria_id.name,
             }) for producto in productos]
+
         else:
+
             self.line_ids = []
 
     @api.multi
@@ -57,10 +86,17 @@ class Listaprecios(models.Model):
 
     @api.multi
     def actualizar_precio(self):
+
         """Actualizar precios de productos y guardar historial de cambios."""
+
         for line in self.line_ids:
+
             if line.nuevo_precio and line.nuevo_precio != line.precio_actual:
+
+                self.write({'status': 'aplicada'})
+                
                 producto = self.env['itsa.materiales.productos'].search([('clave', '=', line.clave)], limit=1)
+
                 # Guardar el historial del cambio de precio
                 self.env['materiales.precio.historial'].create({
                     'name': producto.name,
@@ -69,6 +105,7 @@ class Listaprecios(models.Model):
                     'fecha_cambio': fields.Date.context_today(self),
                     'listaprecios_id': self.id,
                 })
+                
                 # Actualizar el valor_actual del producto
                 producto.write({'valor_actual': line.nuevo_precio})
 
@@ -89,16 +126,6 @@ class Detalleprecios(models.Model):
     nuevo_precio = fields.Float(string='Nuevo Precio')
     categoria = fields.Char(string='Categoría')
     subcategoria = fields.Char(string='Subcategoría')
-
-    @api.onchange('clave')
-    def _onchange_clave(self):
-        """Actualizar campos de detalle al seleccionar un producto."""
-        if self.clave:
-            producto = self.env['itsa.materiales.productos'].search([('clave', '=', self.clave)], limit=1)
-            self.nombre = producto.name
-            self.precio_actual = producto.valor_actual
-            self.categoria = producto.categoria_id.name
-            self.subcategoria = producto.subcategoria_id.name
 
 class PrecioHistorial(models.Model):
     _name = 'materiales.precio.historial'
