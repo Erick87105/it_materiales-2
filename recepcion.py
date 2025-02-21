@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from openerp import models, fields, api
 from openerp.exceptions import ValidationError
-from datetime import datetime
 from openerp.exceptions import Warning
 
 # libreria que permite saber la similitud de una cadena de texto

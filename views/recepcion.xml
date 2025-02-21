@@ -73,7 +73,7 @@
             </field>
         </record>
 
-        <!-- Vista tree de recepciones -->
+        <!-- Vista tipo tree de recepciones -->
         <record model="ir.ui.view" id="materiales_recepcion_tree">
             <field name="name">materiales.recepcion.tree</field>
             <field name="model">materiales.recepcion</field>

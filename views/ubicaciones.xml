@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <!-- Vista tipo tree de  -->
+        <!-- Vista tipo tree -->
         <record model="ir.ui.view" id="materiales_ubicaciones_tree">
             <field name="name">materiales.ubicaciones.tree</field>
             <field name="model">itsa.materiales.ubicaciones</field>
@@ -18,7 +18,7 @@
 
         
 
-        <!-- Vista de búsqueda del modelo it_titulaciones.documentos -->
+        <!-- Vista de búsqueda -->
         <record model="ir.ui.view" id="materiales_ubicaciones_search">
             <field name="name">materiales.ubicaciones.search</field>
             <field name="model">itsa.materiales.ubicaciones</field>
@@ -32,7 +32,7 @@
             </field>
         </record>
 
-        <!-- Acción para el modelo it_titulaciones.documentos -->
+        <!-- Acción -->
         <record id="materiales_ubicaciones_action" model="ir.actions.act_window">
             <field name="name">Ubicaciones</field>
             <field name="res_model">itsa.materiales.ubicaciones</field>
