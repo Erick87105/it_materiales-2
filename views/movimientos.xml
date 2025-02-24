@@ -52,10 +52,10 @@
                                         <field name="producto_id"/>
                                         <field name="departamento_origen"/>
                                         <field name="edificio_origen"/>
-                                        <field name="area_origen"/>
+                                        <field name="area_origen_id"/>
                                         <field name="departamento_destino_id"/>
                                         <field name="edificio_destino"/>
-                                        <field name="area_destino"/>
+                                        <field name="area_destino_id"/>
                                         <field name="descripcion"/>
                                     </tree>
                                 </field>
